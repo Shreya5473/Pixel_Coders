@@ -1,0 +1,576 @@
+/* ========================================================================
+   GLOBAL GLASSMORPHISM DESIGN SYSTEM
+   ======================================================================== */
+
+:root {
+    /* Primary Colors & Gradients */
+    --mist-blue: #C9D6E3;
+    --soft-lavender: #D6D9F0;
+    --pale-mint: #D8E8E2;
+    --slate-blue: #B7C5D3;
+
+    /* Text Colors */
+    --text-primary: #2F3A45;
+    --text-secondary: #6B7684;
+    --text-muted: #8A95A3;
+
+    /* Glass Surfaces */
+    --glass-bg: rgba(255, 255, 255, 0.28);
+    --glass-border: rgba(255, 255, 255, 0.40);
+    --glass-blur: blur(24px);
+    
+    /* Shadows */
+    --shadow-default: 0 6px 24px rgba(100, 120, 160, 0.13);
+    --shadow-hover: 0 10px 32px rgba(100, 120, 160, 0.20);
+
+    /* Transitions */
+    --transition-glass: all 0.18s ease;
+}
+
+/* Base Body Override */
+html, body {
+    margin: 0;
+    padding: 0;
+    /* Fixed pastel watercolor gradient */
+    background: linear-gradient(135deg, var(--mist-blue), var(--soft-lavender), var(--pale-mint), var(--slate-blue)) no-repeat center center fixed !important;
+    background-size: cover !important;
+    font-family: 'DM Sans', sans-serif !important;
+    color: var(--text-primary) !important;
+    min-height: 100vh;
+}
+
+/* Remove default white backgrounds from containers */
+body .bg-white,
+main.bg-white,
+header.bg-white,
+footer.bg-white,
+.panel.bg-white,
+.card.bg-white,
+.bg-gray-50, /* Bagisto default backgrounds */
+.bg-gray-100 {
+    background-color: transparent !important;
+}
+
+/* ========================================================================
+   TYPOGRAPHY
+   ======================================================================== */
+h1, h2, h3, h4, h5, h6, .font-serif, .display-text {
+    font-family: 'Fraunces', serif !important;
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+p, span, div, a, li, label, .text-gray-600, .text-gray-500 {
+    color: var(--text-secondary);
+}
+
+.text-gray-400, .metadata, .text-sm.text-gray-500 {
+    color: var(--text-muted) !important;
+}
+
+/* Never pure black or white */
+* {
+    color-scheme: light !important;
+}
+
+/* ========================================================================
+   GLASSMORPHISM SURFACES
+   ======================================================================== */
+/* Apply to all surface containers like cards, navbars, sidebars, modals */
+header, 
+footer, 
+.card, 
+.panel, 
+.modal-content, 
+.dropdown-menu, 
+.sidebar, 
+.product-card,
+.bg-white.shadow,
+.bg-white.rounded-xl,
+.bg-white.border {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 18px !important;
+    box-shadow: var(--shadow-default) !important;
+    transition: var(--transition-glass) !important;
+    overflow: hidden; /* Contains the blur for inner elements */
+}
+
+/* Hover effects for glass surfaces (elevate) */
+a.product-card:hover,
+.card:hover,
+.clickable-panel:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-hover) !important;
+}
+
+/* ========================================================================
+   CARD TINTS (Pastel Overlays)
+   ======================================================================== */
+/* We define utility classes that can be added, or apply randomly via nth-child to product grids */
+
+/* Mint Tint */
+.tint-mint, .product-card:nth-child(6n+1) {
+    background: linear-gradient(135deg, rgba(221,242,230,0.70), rgba(207,233,219,0.66)) !important;
+}
+
+/* Soft Blue Tint */
+.tint-blue, .product-card:nth-child(6n+2) {
+    background: linear-gradient(135deg, rgba(220,231,246,0.70), rgba(207,224,244,0.66)) !important;
+}
+
+/* Lavender Tint */
+.tint-lavender, .product-card:nth-child(6n+3) {
+    background: linear-gradient(135deg, rgba(230,226,248,0.70), rgba(218,213,244,0.66)) !important;
+}
+
+/* Warm Sand Tint */
+.tint-sand, .product-card:nth-child(6n+4) {
+    background: linear-gradient(135deg, rgba(246,231,210,0.70), rgba(241,217,184,0.66)) !important;
+}
+
+/* Aqua Mint Tint */
+.tint-aqua, .product-card:nth-child(6n+5) {
+    background: linear-gradient(135deg, rgba(217,239,233,0.70), rgba(203,230,223,0.66)) !important;
+}
+
+/* Neutral Frost Tint */
+.tint-frost, .product-card:nth-child(6n+6) {
+    background: linear-gradient(135deg, rgba(241,243,246,0.70), rgba(231,235,240,0.66)) !important;
+}
+
+/* Ensure images inside cards don't break the blur radius */
+.product-card img {
+    border-radius: 18px 18px 0 0 !important;
+}
+
+
+/* ========================================================================
+   BUTTONS
+   ======================================================================== */
+button,
+.btn,
+.primary-button,
+.secondary-button,
+a.bg-navyBlue, /* Bagisto default primary classes */
+button.bg-navyBlue {
+    background: rgba(255, 255, 255, 0.40) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    color: var(--text-primary) !important;
+    border-radius: 999px !important; /* Pill shape */
+    box-shadow: var(--shadow-default) !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 500 !important;
+    transition: var(--transition-glass) !important;
+    transform: none !important; /* No scaling */
+}
+
+/* Active / Primary Hover State -> Lavender Shift */
+button:hover,
+.btn:hover,
+.primary-button:hover,
+.secondary-button:hover,
+a.bg-navyBlue:hover,
+button.bg-navyBlue:hover {
+    background: rgba(160, 140, 230, 0.22) !important;
+    border-color: rgba(160, 140, 230, 0.40) !important;
+    color: #7060A8 !important;
+}
+
+/* Success / Confirmed State -> Mint Green Shift */
+.btn-success,
+button[type="submit"] {
+    background: rgba(207, 233, 219, 0.55) !important;
+    border-color: rgba(207, 233, 219, 0.65) !important;
+    color: #3A7A54 !important;
+}
+
+.btn-success:hover,
+button[type="submit"]:hover {
+    background: rgba(207, 233, 219, 0.70) !important;
+}
+
+/* Remove default focus outlines, add soft glass ring */
+button:focus, input:focus, select:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ========================================================================
+   PILL BADGES AND TAGS
+   ======================================================================== */
+.badge,
+.tag,
+.label-pending,
+.label-processing,
+.label-closed,
+.label-canceled,
+.label-info,
+.label-completed,
+.label-active,
+span.bg-green-100.text-green-800, /* Default Tailwind badges */
+span.bg-blue-100.text-blue-800 {
+    background: rgba(255, 255, 255, 0.42) !important;
+    border: 1px solid rgba(255, 255, 255, 0.56) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-radius: 999px !important;
+    padding: 4px 12px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Tag Variants */
+.label-completed, .label-active, span.bg-green-100 {
+    background: rgba(207, 233, 219, 0.55) !important;
+    color: #3A7A54 !important;
+}
+
+.label-processing, .label-info, span.bg-blue-100 {
+    background: rgba(207, 224, 244, 0.55) !important;
+    color: #4A6C9B !important;
+}
+
+.label-pending, .label-closed {
+    background: rgba(218, 213, 244, 0.55) !important;
+    color: #7060A8 !important;
+}
+
+
+/* ========================================================================
+   INPUT FIELDS
+   ======================================================================== */
+input[type="text"], input[type="email"], input[type="password"], input[type="search"], select, textarea {
+    background: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    color: var(--text-primary) !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 2px 6px rgba(100, 120, 160, 0.05) !important;
+    transition: var(--transition-glass) !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* ========================================================================
+   AMBIENT DEPTH BLOBS
+   ======================================================================== */
+.ambient-blob {
+    position: fixed;
+    border-radius: 50%;
+    z-index: -1; /* Behind everything */
+    pointer-events: none;
+    filter: blur(40px);
+}
+
+.blob-1 {
+    width: 60vw;
+    height: 60vw;
+    max-width: 800px;
+    max-height: 800px;
+    background: rgba(200, 220, 255, 0.30);
+    top: -20vh;
+    left: -10vw;
+}
+
+.blob-2 {
+    width: 50vw;
+    height: 50vw;
+    max-width: 600px;
+    max-height: 600px;
+    background: rgba(210, 240, 220, 0.28);
+    bottom: -15vh;
+    right: -10vw;
+}
+
+.blob-3 {
+    width: 40vw;
+    height: 40vw;
+    max-width: 500px;
+    max-height: 500px;
+    background: rgba(220, 210, 250, 0.25);
+    top: 40vh;
+    left: 40vw;
+}
+
+/* Specific overrides for remaining opaque elements */
+.bg-zinc-100, .bg-[#F5F5F5], .bg-gray-100 {
+    background-color: var(--glass-bg) !important;
+}
+
+.search-container input, .search-container form, form.flex.items-center, div.flex.w-full.max-w-\[545px\].items-center.rounded-lg.bg-\[\#F5F5F5\] {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--shadow-default) !important;
+}
+
+div.place-content-center.rounded-full.bg-navyBlue,
+.bg-navyBlue {
+    background: rgba(255, 255, 255, 0.40) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: var(--shadow-default) !important;
+}
+
+div.place-content-center.rounded-full.bg-navyBlue:hover,
+.bg-navyBlue:hover {
+    background: rgba(160, 140, 230, 0.22) !important;
+    border-color: rgba(160, 140, 230, 0.40) !important;
+    color: #7060A8 !important;
+}
+
+/* Make sure all swiper pagination bullets are glass */
+.swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(255,255,255,0.6) !important;
+    opacity: 1 !important;
+}
+.swiper-pagination-bullet-active {
+    background: rgba(160, 140, 230, 0.5) !important;
+}
+
+/* Force standard dark mode generic text to matching pastel secondary text color */
+.text-gray-900, .text-gray-800, .text-black, .text-\[\#060C3B\] {
+    color: var(--text-primary) !important;
+}
+
+/* =====================================================================
+   CATEGORY PAGE — GLASSMORPHISM OVERRIDES
+   ===================================================================== */
+
+/* Category header */
+.glass-category-header {
+    padding: 32px 0 20px;
+    text-align: center;
+}
+.glass-category-title {
+    font-family: 'Fraunces', serif !important;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: #2F3A45 !important;
+    margin: 0 0 8px !important;
+    letter-spacing: -0.02em;
+}
+.glass-category-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: #6B7684;
+    margin: 0;
+}
+
+/* Filter sidebar glass panel */
+.panel-side,
+div.grid.max-h-\[1320px\].min-w-\[342px\] {
+    background: rgba(255,255,255,0.26) !important;
+    backdrop-filter: blur(22px) !important;
+    -webkit-backdrop-filter: blur(22px) !important;
+    border: 1px solid rgba(255,255,255,0.40) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 6px 24px rgba(100,120,160,0.13) !important;
+    padding: 20px 18px !important;
+}
+
+/* Filter accordion borders */
+.panel-side .border-b,
+div.grid.max-h-\[1320px\].min-w-\[342px\] .border-b {
+    border-color: rgba(255,255,255,0.35) !important;
+}
+
+/* Filter label text */
+.panel-side p.text-lg,
+div.grid.max-h-\[1320px\].min-w-\[342px\] p.text-lg {
+    font-family: 'Fraunces', serif !important;
+    color: #2F3A45 !important;
+}
+.panel-side p.text-xs,
+div.grid.max-h-\[1320px\].min-w-\[342px\] p.text-xs {
+    color: #6B7684 !important;
+}
+
+/* Filter checkboxes — restyle as glass */
+div.flex.select-none.items-center.gap-x-4.rounded {
+    border-radius: 10px !important;
+    padding: 6px 8px !important;
+    transition: background 0.18s ease !important;
+}
+div.flex.select-none.items-center.gap-x-4.rounded:hover {
+    background: rgba(255,255,255,0.40) !important;
+}
+
+/* Filter option labels */
+label.w-full.cursor-pointer.p-2 {
+    font-family: 'DM Sans', sans-serif !important;
+    color: #2F3A45 !important;
+    font-size: 0.9rem !important;
+}
+
+/* Filter search input */
+div.relative input[type="text"] {
+    background: rgba(255,255,255,0.42) !important;
+    border: 1px solid rgba(255,255,255,0.58) !important;
+    border-radius: 14px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    color: #2F3A45 !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+/* Toolbar glass panel */
+.flex.justify-between.max-md\:hidden {
+    background: rgba(255,255,255,0.26) !important;
+    backdrop-filter: blur(22px) !important;
+    -webkit-backdrop-filter: blur(22px) !important;
+    border: 1px solid rgba(255,255,255,0.40) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 6px 24px rgba(100,120,160,0.13) !important;
+    padding: 14px 20px !important;
+}
+
+/* Toolbar sort dropdown button */
+button.flex.w-full.max-w-\[200px\].cursor-pointer.items-center.justify-between.gap-4.rounded-lg.border.border-zinc-200 {
+    background: rgba(255,255,255,0.40) !important;
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 14px !important;
+    backdrop-filter: blur(10px) !important;
+    color: #2F3A45 !important;
+    font-family: 'DM Sans', sans-serif !important;
+}
+
+/* Toolbar dropdown menu */
+div.dropdown-menu,
+[class*="dropdown"] > div:last-child,
+.z-\[1\] div[class*="absolute"] {
+    background: rgba(255,255,255,0.88) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 32px rgba(100,120,160,0.20) !important;
+    overflow: hidden;
+}
+
+/* Product card grid glassmorphism */
+x-shop-products-card,
+.product-card,
+[class*="product-card"],
+.bg-white.rounded-xl.relative.group {
+    background: rgba(255,255,255,0.26) !important;
+    backdrop-filter: blur(22px) !important;
+    -webkit-backdrop-filter: blur(22px) !important;
+    border: 1px solid rgba(255,255,255,0.40) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 6px 24px rgba(100,120,160,0.13) !important;
+    transition: all 0.18s ease !important;
+    overflow: hidden;
+}
+.bg-white.rounded-xl.relative.group:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 32px rgba(100,120,160,0.20) !important;
+}
+
+/* Product card name */
+.product-card p.font-medium,
+[class*="product"] .font-medium {
+    font-family: 'DM Sans', sans-serif !important;
+    color: #2F3A45 !important;
+}
+
+/* Product price */
+.product-card [class*="price"],
+[class*="product"] [class*="price"] {
+    font-family: 'DM Sans', sans-serif !important;
+    color: #6B7684 !important;
+    font-weight: 600 !important;
+}
+
+/* Load more button */
+button.secondary-button {
+    background: rgba(255,255,255,0.40) !important;
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 999px !important;
+    backdrop-filter: blur(10px) !important;
+    color: #6B7684 !important;
+    font-family: 'DM Sans', sans-serif !important;
+    transition: all 0.18s ease !important;
+}
+button.secondary-button:hover {
+    background: rgba(160,140,230,0.22) !important;
+    border-color: rgba(160,140,230,0.40) !important;
+    color: #7060A8 !important;
+}
+
+/* Mobile filter bar */
+div.fixed.bottom-0.z-10.grid {
+    background: rgba(255,255,255,0.80) !important;
+    backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(255,255,255,0.50) !important;
+}
+
+/* Rating stars color */
+.icon-star-fill { color: #c9a84c !important; }
+.icon-star { color: #C9D6E3 !important; }
+
+/* Sorting: "Newest", "Price: Low→High" etc. from toolbar */
+[id*="sort"] li, [id*="toolbar"] li {
+    font-family: 'DM Sans', sans-serif !important;
+    color: #2F3A45 !important;
+}
+
+/* Color swatch options in filters */
+.swatch-option,
+[class*="swatch"] {
+    border-radius: 50% !important;
+    border: 2px solid rgba(255,255,255,0.60) !important;
+    box-shadow: 0 2px 6px rgba(100,120,160,0.18) !important;
+    width: 26px !important;
+    height: 26px !important;
+}
+
+/* Range slider track */
+input[type="range"] {
+    accent-color: rgba(160,140,230,0.8) !important;
+}
+
+/* Tailwind bg-gray-100 hover on filter items */
+.hover\:bg-gray-100:hover {
+    background: rgba(255,255,255,0.38) !important;
+}
+
+/* =====================================================================
+   FORCE GRID LAYOUT ON COLLECTION CARDS
+   ===================================================================== */
+.glass-card-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    width: 100% !important;
+}
+@media (max-width: 1200px) {
+    .glass-card-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 768px) {
+    .glass-card-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+}
+.collection-card-link {
+    display: block !important;
+    text-decoration: none !important;
+}
+.glass-collection-card {
+    display: flex !important;
+    flex-direction: column !important;
+}
+.glass-collection-card .card-image-wrap {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 180px !important;
+    font-size: 4rem !important;
+}

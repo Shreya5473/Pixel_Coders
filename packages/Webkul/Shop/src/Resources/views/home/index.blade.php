@@ -60,20 +60,32 @@
                 }
             }
 
-            // Resolve product ID for cart
+            // Resolve product ID for cart (use simple product so add-to-cart works with just product_id + quantity)
             $productRow = DB::table('product_categories as pc')
                 ->where('pc.category_id', $def['cat_id'])
                 ->join('product_flat as pf', 'pf.product_id', '=', 'pc.product_id')
                 ->where('pf.status', 1)
-                ->select('pc.product_id')->first();
+                ->join('products as p', 'p.id', '=', 'pc.product_id')
+                ->select('pc.product_id', 'p.type', 'p.id as pid')->first();
+
+            $cartProductId = null;
+            if ($productRow) {
+                if (($productRow->type ?? '') === 'configurable') {
+                    $child = DB::table('products')->where('parent_id', $productRow->product_id)->value('id');
+                    $cartProductId = $child ?: $productRow->product_id;
+                } else {
+                    $cartProductId = $productRow->product_id;
+                }
+            }
 
             if (!empty($items)) {
                 $collections[] = [
-                    'slug'       => $def['slug'],
-                    'label'      => $def['label'],
-                    'cat_id'     => $def['cat_id'],
-                    'tint'       => $def['tint'],
-                    'product_id' => $productRow?->product_id,
+                    'slug'            => $def['slug'],
+                    'label'           => $def['label'],
+                    'cat_id'          => $def['cat_id'],
+                    'tint'            => $def['tint'],
+                    'product_id'      => $productRow?->product_id,
+                    'cart_product_id' => $cartProductId,
                     'thumb'      => $thumbImg,
                     'items'      => $items,
                     'colors'     => $colors,
@@ -97,7 +109,7 @@
     @endif
 @endpush
 
-<x-shop::layouts>
+<x-shop::layouts :has-feature="false">
     <x-slot:title>{{ $channel->home_seo['meta_title'] ?? 'BAGISTO — Luxury Fashion' }}</x-slot>
 
     {{-- ── Promo Banner ──────────────────────────────────────────────── --}}
@@ -126,13 +138,29 @@
         </div>
     </section>
 
+    {{-- ── Mid Showcase Section ───────────────────────────────────── --}}
+    @if($heroImg)
+        <section class="acm-mid-showcase" aria-label="Featured style showcase">
+            <div class="acm-mid-showcase-inner">
+                <div class="acm-mid-copy">
+                    <p class="acm-mid-kicker">Editor's pick</p>
+                    <p class="acm-mid-title">Signature silhouettes for every day.</p>
+                    <p class="acm-mid-sub">Refined essentials with soft tailoring and modern cuts.</p>
+
+                    <a href="{{ route('shop.search.index') }}" class="btn btn-primary" style="padding: 11px 24px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">Explore All</a>
+                </div>
+
+                <div class="acm-mid-media">
+                    <img src="{{ $heroImg }}" alt="Featured fashion look" loading="lazy" decoding="async" />
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- ── Zara-style Collections Hub ───────────────────────────────── --}}
     <div id="collections">
         <v-bagisto-home></v-bagisto-home>
     </div>
-
-    {{-- ── Shopping Services ─────────────────────────────────────────── --}}
-    <x-shop::layouts.services />
 
     @pushOnce('scripts')
         <script type="text/x-template" id="v-bagisto-home-tpl">
@@ -184,7 +212,7 @@
                                 :key="j"
                                 :class="'product-card-glass ' + current.tint"
                                 style="flex:0 0 calc(25% - 12px);min-width:220px;cursor:pointer;border-radius:20px;overflow:hidden;transition:all 0.32s ease;box-shadow:0 8px 32px rgba(100,120,160,0.12);"
-                                @click="openDrawer(item)"
+                                @click="goToCollection(current.slug)"
                                 onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 16px 48px rgba(100,120,160,0.22)'"
                                 onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(100,120,160,0.12)'"
                             >
@@ -198,9 +226,6 @@
                                         onmouseover="this.style.transform='scale(1.05)'"
                                         onmouseout="this.style.transform='scale(1)'"
                                     />
-                                    <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;background:linear-gradient(to top,rgba(0,0,0,0.24) 0%,transparent 55%);opacity:0;transition:opacity 0.28s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
-                                        <span style="background:rgba(255,255,255,0.88);border:none;color:var(--text-ui);font:700 9px/1 'DM Sans';letter-spacing:0.18em;text-transform:uppercase;padding:8px 18px;cursor:pointer;border-radius:6px;">QUICK VIEW</span>
-                                    </div>
                                 </div>
                                 <div class="zh-card-info" style="padding:12px 14px 16px;background:rgba(255,255,255,0.22);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.35);">
                                     <div style="font:500 9px/1 'DM Sans';letter-spacing:0.10em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.40);border-radius:10px;border:1px solid rgba(255,255,255,0.55);">@{{ current.label }}</div>
@@ -209,6 +234,12 @@
                                     <div style="display:flex;gap:5px;margin-top:8px;">
                                         <span v-for="c in current.colors" :key="c.name" :style="{width:'14px',height:'14px',borderRadius:'50%',background:c.hex,border:'2px solid rgba(255,255,255,0.70)',display:'inline-block'}"></span>
                                     </div>
+                                    <button
+                                        @click.stop="quickAddToCart(current)"
+                                        style="margin-top:10px;width:100%;background:rgba(160,140,230,0.22);border:1px solid rgba(160,140,230,0.42);color:var(--text-accent);border-radius:10px;padding:10px 12px;font:700 10px/1 'DM Sans';letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;transition:all 0.2s ease;"
+                                    >
+                                        Add To Cart
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -217,7 +248,7 @@
                 <div v-else style="text-align:center;padding:80px 20px;font:11px 'DM Sans';letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);">No products available.</div>
 
                 <!-- View Collection -->
-                <div v-if="current" style="text-align:center;padding:8px 48px 48px;">
+                <div v-if="current" style="text-align:center;padding:8px 48px 12px;">
                     <a :href="'/' + current.slug" style="font:500 10px/1 'DM Sans';letter-spacing:0.20em;text-transform:uppercase;color:var(--text-muted);text-decoration:underline;text-underline-offset:4px;transition:color 0.2s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">
                         View @{{ current.label }} Collection →
                     </a>
@@ -327,18 +358,49 @@
                         const m = this.current?.items.find(i => i.color === c.name);
                         if (m) this.drawer.item = { ...this.drawer.item, url: m.url };
                     },
+                    goToCollection(slug) {
+                        window.location.href = '/' + slug;
+                    },
+                    quickAddToCart(collection) {
+                        const pid = collection?.cart_product_id ?? collection?.product_id;
+
+                        if (!pid) {
+                            window.location.href = '/' + (collection?.slug ?? '');
+                            return;
+                        }
+
+                        this.$axios.post('{{ route('shop.api.checkout.cart.store') }}', {
+                            product_id: pid,
+                            quantity: 1,
+                        })
+                        .then((response) => {
+                            if (response.data?.data) {
+                                this.$emitter.emit('update-mini-cart', response.data.data);
+                            }
+
+                            window.location.href = '{{ route('shop.checkout.cart.index') }}';
+                        })
+                        .catch((error) => {
+                            this.$emitter.emit('add-flash', { type: 'warning', message: error?.response?.data?.message ?? 'Unable to add item to cart.' });
+                        });
+                    },
                     addToCart() {
                         if (!this.drawer.size) { this.drawer.sizeError = true; setTimeout(() => { this.drawer.sizeError = false; }, 2000); return; }
-                        const pid = this.current?.product_id;
+                        const pid = this.current?.cart_product_id ?? this.current?.product_id;
                         if (!pid) { window.location.href = '/' + (this.current?.slug ?? ''); return; }
                         this.drawer.adding = true;
-                        this.$axios.post('{{ route('shop.api.checkout.cart.store') }}', { product_id: pid, quantity: 1 })
+                        this.$axios.post('{{ route('shop.api.checkout.cart.store') }}', { product_id: pid, quantity: 1 }, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
                             .then(r => {
                                 if (r.data?.data) this.$emitter.emit('update-mini-cart', r.data.data);
                                 this.drawer.adding = false;
                                 this.drawer.added  = true;
                             })
-                            .catch(() => { this.drawer.adding = false; window.location.href = '/' + (this.current?.slug ?? ''); });
+                            .catch((err) => {
+                                this.drawer.adding = false;
+                                const msg = err.response?.data?.message || err.message || 'Could not add to cart';
+                                if (typeof this.$emitter?.emit === 'function') this.$emitter.emit('add-flash', { type: 'warning', message: msg });
+                                else window.alert(msg);
+                            });
                     },
                     scroll(amt) { const el = this.$refs.track; if (el) el.scrollLeft += amt; },
                     dragStart(e) {

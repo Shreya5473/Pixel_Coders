@@ -409,7 +409,6 @@
                                             button-type="secondary-button"
                                             :loading="false"
                                             :title="trans('shop::app.products.view.add-to-cart')"
-                                            :disabled="! $product->isSaleable(1)"
                                             ::loading="isStoring.addToCart"
                                             ::disabled="isStoring.addToCart"
                                             @click="is_buy_now=0;"

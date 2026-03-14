@@ -78,7 +78,7 @@ body {
 #app { position: relative; z-index: 1; }
 main#main {
   background: transparent !important;
-  min-height: 100vh;
+  min-height: auto;
   animation: pageIn 0.38s ease both;
 }
 @keyframes pageIn {
@@ -883,16 +883,19 @@ input[type="checkbox"] { accent-color: var(--text-accent); }
 .acm-intro {
   display: flex;
   justify-content: center;
-  padding: 20px 24px 10px;
+  padding: 20px 0 10px;
 }
 
 .acm-intro-card {
-  width: min(960px, 100%);
+  width: 100%;
+  max-width: none;
   display: grid;
   justify-items: center;
   gap: 12px;
   padding: 22px 28px;
-  border-radius: 22px;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
   background: linear-gradient(135deg, rgba(220,231,246,0.58), rgba(230,226,248,0.52));
   border: 1px solid rgba(255,255,255,0.48);
   backdrop-filter: blur(18px);
@@ -941,6 +944,82 @@ input[type="checkbox"] { accent-color: var(--text-accent); }
   margin: 0;
   font: 400 14px/1.5 'DM Sans', sans-serif;
   color: var(--text-secondary);
+}
+
+.acm-mid-showcase {
+  padding: 10px 0 14px;
+}
+
+.acm-mid-showcase-inner {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(340px, 1.3fr);
+  gap: 18px;
+  align-items: center;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border: 1px solid rgba(255,255,255,0.45);
+  background: linear-gradient(135deg, rgba(220,231,246,0.45), rgba(230,226,248,0.42));
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-card);
+}
+
+.acm-mid-copy {
+  padding: 8px 6px 8px 12px;
+}
+
+.acm-mid-kicker {
+  margin: 0 0 8px;
+  font: 600 10px/1 'DM Sans', sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.acm-mid-title {
+  margin: 0 0 10px;
+  font: 500 clamp(24px, 2.3vw, 34px)/1.18 'Fraunces', serif;
+  color: var(--text-primary);
+}
+
+.acm-mid-sub {
+  margin: 0 0 18px;
+  font: 400 14px/1.55 'DM Sans', sans-serif;
+  color: var(--text-secondary);
+  max-width: 42ch;
+}
+
+.acm-mid-media {
+  height: clamp(260px, 32vw, 380px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.48);
+  background: rgba(255,255,255,0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acm-mid-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .acm-mid-showcase-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .acm-mid-copy {
+    padding: 4px;
+  }
 }
 
 /* ── Home Hero Section ───────────────────────────────────────────── */

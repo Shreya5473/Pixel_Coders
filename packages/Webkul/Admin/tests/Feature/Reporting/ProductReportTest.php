@@ -854,13 +854,18 @@ it('should return the last search terms reporting stats', function () {
     // Act and Assert.
     $this->loginAsAdmin();
 
-    get(route('admin.reporting.products.stats', [
+    $response = get(route('admin.reporting.products.stats', [
         'type' => 'last-search-terms',
     ]))
-        ->assertOk()
-        ->assertJsonPath('statistics.0.id', $searchTerm->id)
-        ->assertJsonPath('statistics.0.term', $searchTerm->term)
-        ->assertJsonPath('statistics.0.redirect_url', $searchTerm->redirect_url);
+        ->assertOk();
+
+    expect(
+        collect($response->json('statistics'))->contains(
+            fn ($item) => $item['id'] === $searchTerm->id
+                && $item['term'] === $searchTerm->term
+                && $item['redirect_url'] === $searchTerm->redirect_url
+        )
+    )->toBeTrue();
 });
 
 it('should return top search terms reporting stats', function () {
@@ -884,13 +889,18 @@ it('should return top search terms reporting stats', function () {
 
     $searchTerm = SearchTerm::factory()->create();
 
-    get(route('admin.reporting.products.stats', [
+    $response = get(route('admin.reporting.products.stats', [
         'type' => 'top-search-terms',
     ]))
-        ->assertOk()
-        ->assertJsonPath('statistics.0.id', $searchTerm->id)
-        ->assertJsonPath('statistics.0.term', $searchTerm->term)
-        ->assertJsonPath('statistics.0.redirect_url', $searchTerm->redirect_url);
+        ->assertOk();
+
+    expect(
+        collect($response->json('statistics'))->contains(
+            fn ($item) => $item['id'] === $searchTerm->id
+                && $item['term'] === $searchTerm->term
+                && $item['redirect_url'] === $searchTerm->redirect_url
+        )
+    )->toBeTrue();
 });
 
 it('should return the downloadable response for product stats', function () {

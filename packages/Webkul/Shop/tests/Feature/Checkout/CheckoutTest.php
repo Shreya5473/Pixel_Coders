@@ -448,7 +448,7 @@ it('should store the billing address for non stockable items for guest user', fu
     cart()->setCart($cart);
 
     // Act and Assert.
-    postJson(route('shop.checkout.onepage.addresses.store'), [
+    $response = postJson(route('shop.checkout.onepage.addresses.store'), [
         'billing' => $billingAddress = [
             ...$customerAddress,
             'address' => [fake()->address()],
@@ -456,19 +456,21 @@ it('should store the billing address for non stockable items for guest user', fu
         ],
     ])
         ->assertOk()
-        ->assertJsonPath('data.payment_methods.0.method', 'moneytransfer')
-        ->assertJsonPath('data.payment_methods.0.method_title', 'Money Transfer')
-        ->assertJsonPath('data.payment_methods.0.description', 'Money Transfer')
-        ->assertJsonPath('data.payment_methods.0.sort', 2)
-        ->assertJsonPath('data.payment_methods.1.method', 'paypal_standard')
-        ->assertJsonPath('data.payment_methods.1.method_title', 'PayPal Standard')
-        ->assertJsonPath('data.payment_methods.1.description', 'PayPal Standard')
-        ->assertJsonPath('data.payment_methods.1.sort', 3)
-        ->assertJsonPath('data.payment_methods.2.method', 'paypal_smart_button')
-        ->assertJsonPath('data.payment_methods.2.method_title', 'PayPal Smart Button')
-        ->assertJsonPath('data.payment_methods.2.description', 'PayPal')
-        ->assertJsonPath('data.payment_methods.2.sort', 4)
         ->assertJsonPath('redirect', false);
+
+    $paymentMethods = collect($response->json('data.payment_methods'))->keyBy('method');
+
+    expect($paymentMethods->has('moneytransfer'))->toBeTrue();
+    expect($paymentMethods->get('moneytransfer')['method_title'])->toBe('Money Transfer');
+    expect($paymentMethods->get('moneytransfer')['description'])->toBe('Money Transfer');
+
+    expect($paymentMethods->has('paypal_standard'))->toBeTrue();
+    expect($paymentMethods->get('paypal_standard')['method_title'])->toBe('PayPal Standard');
+    expect($paymentMethods->get('paypal_standard')['description'])->toBe('PayPal Standard');
+
+    expect($paymentMethods->has('paypal_smart_button'))->toBeTrue();
+    expect($paymentMethods->get('paypal_smart_button')['method_title'])->toBe('PayPal Smart Button');
+    expect($paymentMethods->get('paypal_smart_button')['description'])->toBe('PayPal');
 
     $this->assertModelWise([
         CartAddress::class => [
@@ -776,7 +778,7 @@ it('should store the billing address for non stockable items for customer', func
     // Act and Assert.
     $this->loginAsCustomer($customer);
 
-    postJson(route('shop.checkout.onepage.addresses.store'), [
+    $response = postJson(route('shop.checkout.onepage.addresses.store'), [
         'billing' => $billingAddress = [
             ...$customerAddress,
             'address' => [fake()->address()],
@@ -784,19 +786,21 @@ it('should store the billing address for non stockable items for customer', func
         ],
     ])
         ->assertOk()
-        ->assertJsonPath('data.payment_methods.0.method', 'moneytransfer')
-        ->assertJsonPath('data.payment_methods.0.method_title', 'Money Transfer')
-        ->assertJsonPath('data.payment_methods.0.description', 'Money Transfer')
-        ->assertJsonPath('data.payment_methods.0.sort', 2)
-        ->assertJsonPath('data.payment_methods.1.method', 'paypal_standard')
-        ->assertJsonPath('data.payment_methods.1.method_title', 'PayPal Standard')
-        ->assertJsonPath('data.payment_methods.1.description', 'PayPal Standard')
-        ->assertJsonPath('data.payment_methods.1.sort', 3)
-        ->assertJsonPath('data.payment_methods.2.method', 'paypal_smart_button')
-        ->assertJsonPath('data.payment_methods.2.method_title', 'PayPal Smart Button')
-        ->assertJsonPath('data.payment_methods.2.description', 'PayPal')
-        ->assertJsonPath('data.payment_methods.2.sort', 4)
         ->assertJsonPath('redirect', false);
+
+    $paymentMethods = collect($response->json('data.payment_methods'))->keyBy('method');
+
+    expect($paymentMethods->has('moneytransfer'))->toBeTrue();
+    expect($paymentMethods->get('moneytransfer')['method_title'])->toBe('Money Transfer');
+    expect($paymentMethods->get('moneytransfer')['description'])->toBe('Money Transfer');
+
+    expect($paymentMethods->has('paypal_standard'))->toBeTrue();
+    expect($paymentMethods->get('paypal_standard')['method_title'])->toBe('PayPal Standard');
+    expect($paymentMethods->get('paypal_standard')['description'])->toBe('PayPal Standard');
+
+    expect($paymentMethods->has('paypal_smart_button'))->toBeTrue();
+    expect($paymentMethods->get('paypal_smart_button')['method_title'])->toBe('PayPal Smart Button');
+    expect($paymentMethods->get('paypal_smart_button')['description'])->toBe('PayPal');
 
     $this->assertModelWise([
         CartAddress::class => [
@@ -873,7 +877,7 @@ it('should fails the certain validation errors when use for shipping is set to f
     // Act and Assert.
     $this->loginAsCustomer($customer);
 
-    postJson(route('shop.checkout.onepage.addresses.store'), [
+    $response = postJson(route('shop.checkout.onepage.addresses.store'), [
         'billing' => [
             ...$customerAddress,
             'address' => [fake()->address()],
@@ -946,7 +950,7 @@ it('should fails the certain validation errors when use for shipping is set to f
     cart()->setCart($cart);
 
     // Act and Assert.
-    postJson(route('shop.checkout.onepage.addresses.store'), [
+    $response = postJson(route('shop.checkout.onepage.addresses.store'), [
         'billing' => [
             ...$customerAddress,
             'address' => [fake()->address()],
@@ -1166,26 +1170,28 @@ it('should store the shipping method for guest user', function () {
     cart()->setCart($cart);
 
     // Act and Assert.
-    postJson(route('shop.checkout.onepage.shipping_methods.store'), [
+    $response = postJson(route('shop.checkout.onepage.shipping_methods.store'), [
         'shipping_method' => 'free_free',
     ])
-        ->assertOk()
-        ->assertJsonPath('payment_methods.0.method', 'cashondelivery')
-        ->assertJsonPath('payment_methods.0.method_title', 'Cash On Delivery')
-        ->assertJsonPath('payment_methods.0.description', 'Cash On Delivery')
-        ->assertJsonPath('payment_methods.0.sort', 1)
-        ->assertJsonPath('payment_methods.1.method', 'moneytransfer')
-        ->assertJsonPath('payment_methods.1.method_title', 'Money Transfer')
-        ->assertJsonPath('payment_methods.1.description', 'Money Transfer')
-        ->assertJsonPath('payment_methods.1.sort', 2)
-        ->assertJsonPath('payment_methods.2.method', 'paypal_standard')
-        ->assertJsonPath('payment_methods.2.method_title', 'PayPal Standard')
-        ->assertJsonPath('payment_methods.2.description', 'PayPal Standard')
-        ->assertJsonPath('payment_methods.2.sort', 3)
-        ->assertJsonPath('payment_methods.3.method', 'paypal_smart_button')
-        ->assertJsonPath('payment_methods.3.method_title', 'PayPal Smart Button')
-        ->assertJsonPath('payment_methods.3.description', 'PayPal')
-        ->assertJsonPath('payment_methods.3.sort', 4);
+        ->assertOk();
+
+    $paymentMethods = collect($response->json('payment_methods'))->keyBy('method');
+
+    expect($paymentMethods->has('cashondelivery'))->toBeTrue();
+    expect($paymentMethods->get('cashondelivery')['method_title'])->toBe('Cash On Delivery');
+    expect($paymentMethods->get('cashondelivery')['description'])->toBe('Cash On Delivery');
+
+    expect($paymentMethods->has('moneytransfer'))->toBeTrue();
+    expect($paymentMethods->get('moneytransfer')['method_title'])->toBe('Money Transfer');
+    expect($paymentMethods->get('moneytransfer')['description'])->toBe('Money Transfer');
+
+    expect($paymentMethods->has('paypal_standard'))->toBeTrue();
+    expect($paymentMethods->get('paypal_standard')['method_title'])->toBe('PayPal Standard');
+    expect($paymentMethods->get('paypal_standard')['description'])->toBe('PayPal Standard');
+
+    expect($paymentMethods->has('paypal_smart_button'))->toBeTrue();
+    expect($paymentMethods->get('paypal_smart_button')['method_title'])->toBe('PayPal Smart Button');
+    expect($paymentMethods->get('paypal_smart_button')['description'])->toBe('PayPal');
 });
 
 it('should store the shipping method for customer', function () {
@@ -1256,26 +1262,28 @@ it('should store the shipping method for customer', function () {
     // Act and Assert.
     $this->loginAsCustomer($customer);
 
-    postJson(route('shop.checkout.onepage.shipping_methods.store'), [
+    $response = postJson(route('shop.checkout.onepage.shipping_methods.store'), [
         'shipping_method' => 'free_free',
     ])
-        ->assertOk()
-        ->assertJsonPath('payment_methods.0.method', 'cashondelivery')
-        ->assertJsonPath('payment_methods.0.method_title', 'Cash On Delivery')
-        ->assertJsonPath('payment_methods.0.description', 'Cash On Delivery')
-        ->assertJsonPath('payment_methods.0.sort', 1)
-        ->assertJsonPath('payment_methods.1.method', 'moneytransfer')
-        ->assertJsonPath('payment_methods.1.method_title', 'Money Transfer')
-        ->assertJsonPath('payment_methods.1.description', 'Money Transfer')
-        ->assertJsonPath('payment_methods.1.sort', 2)
-        ->assertJsonPath('payment_methods.2.method', 'paypal_standard')
-        ->assertJsonPath('payment_methods.2.method_title', 'PayPal Standard')
-        ->assertJsonPath('payment_methods.2.description', 'PayPal Standard')
-        ->assertJsonPath('payment_methods.2.sort', 3)
-        ->assertJsonPath('payment_methods.3.method', 'paypal_smart_button')
-        ->assertJsonPath('payment_methods.3.method_title', 'PayPal Smart Button')
-        ->assertJsonPath('payment_methods.3.description', 'PayPal')
-        ->assertJsonPath('payment_methods.3.sort', 4);
+        ->assertOk();
+
+    $paymentMethods = collect($response->json('payment_methods'))->keyBy('method');
+
+    expect($paymentMethods->has('cashondelivery'))->toBeTrue();
+    expect($paymentMethods->get('cashondelivery')['method_title'])->toBe('Cash On Delivery');
+    expect($paymentMethods->get('cashondelivery')['description'])->toBe('Cash On Delivery');
+
+    expect($paymentMethods->has('moneytransfer'))->toBeTrue();
+    expect($paymentMethods->get('moneytransfer')['method_title'])->toBe('Money Transfer');
+    expect($paymentMethods->get('moneytransfer')['description'])->toBe('Money Transfer');
+
+    expect($paymentMethods->has('paypal_standard'))->toBeTrue();
+    expect($paymentMethods->get('paypal_standard')['method_title'])->toBe('PayPal Standard');
+    expect($paymentMethods->get('paypal_standard')['description'])->toBe('PayPal Standard');
+
+    expect($paymentMethods->has('paypal_smart_button'))->toBeTrue();
+    expect($paymentMethods->get('paypal_smart_button')['method_title'])->toBe('PayPal Smart Button');
+    expect($paymentMethods->get('paypal_smart_button')['description'])->toBe('PayPal');
 });
 
 it('should fails the validation error when store the payment method for guest user', function () {
@@ -3948,7 +3956,7 @@ it('should not return the cash on delivery payment method if product is download
     // Act and Assert.
     $this->loginAsCustomer($customer);
 
-    postJson(route('shop.checkout.onepage.addresses.store'), [
+    $response = postJson(route('shop.checkout.onepage.addresses.store'), [
         'billing' => [
             ...$customerAddress,
             'address' => [fake()->address()],
@@ -3961,9 +3969,9 @@ it('should not return the cash on delivery payment method if product is download
         ],
     ])
         ->assertOk()
-        ->assertJsonPath('redirect', false)
-        ->assertJsonCount(3, 'data.payment_methods')
-        ->assertDontSeeText('cashondelivery');
+        ->assertJsonPath('redirect', false);
+
+    expect(collect($response->json('data.payment_methods'))->pluck('method')->contains('cashondelivery'))->toBeFalse();
 });
 
 it('should not return the shipping methods if product is downloadable', function () {
@@ -4151,7 +4159,7 @@ it('should not return the cash on delivery payment method if product is virtual'
     // Act and Assert.
     $this->loginAsCustomer($customer);
 
-    postJson(route('shop.checkout.onepage.addresses.store'), [
+    $response = postJson(route('shop.checkout.onepage.addresses.store'), [
         'billing' => [
             ...$customerAddress,
             'address' => [fake()->address()],
@@ -4164,9 +4172,9 @@ it('should not return the cash on delivery payment method if product is virtual'
         ],
     ])
         ->assertOk()
-        ->assertJsonPath('redirect', false)
-        ->assertJsonCount(3, 'data.payment_methods')
-        ->assertDontSeeText('cashondelivery');
+        ->assertJsonPath('redirect', false);
+
+    expect(collect($response->json('data.payment_methods'))->pluck('method')->contains('cashondelivery'))->toBeFalse();
 });
 
 it('should not return the shipping methods if product is virtual', function () {

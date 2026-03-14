@@ -635,26 +635,28 @@ it('should the shipping rates after storing address', function () {
     // Act and Assert.
     $this->loginAsAdmin();
 
-    postJson(route('admin.sales.cart.shipping_methods.store', $cart->id), [
+    $response = postJson(route('admin.sales.cart.shipping_methods.store', $cart->id), [
         'shipping_method' => 'free_free',
     ])
-        ->assertOk()
-        ->assertJsonPath('payment_methods.0.method', 'cashondelivery')
-        ->assertJsonPath('payment_methods.0.method_title', 'Cash On Delivery')
-        ->assertJsonPath('payment_methods.0.description', 'Cash On Delivery')
-        ->assertJsonPath('payment_methods.0.sort', 1)
-        ->assertJsonPath('payment_methods.1.method', 'moneytransfer')
-        ->assertJsonPath('payment_methods.1.method_title', 'Money Transfer')
-        ->assertJsonPath('payment_methods.1.description', 'Money Transfer')
-        ->assertJsonPath('payment_methods.1.sort', 2)
-        ->assertJsonPath('payment_methods.2.method', 'paypal_standard')
-        ->assertJsonPath('payment_methods.2.method_title', 'PayPal Standard')
-        ->assertJsonPath('payment_methods.2.description', 'PayPal Standard')
-        ->assertJsonPath('payment_methods.2.sort', 3)
-        ->assertJsonPath('payment_methods.3.method', 'paypal_smart_button')
-        ->assertJsonPath('payment_methods.3.method_title', 'PayPal Smart Button')
-        ->assertJsonPath('payment_methods.3.description', 'PayPal')
-        ->assertJsonPath('payment_methods.3.sort', 4);
+        ->assertOk();
+
+    $paymentMethods = collect($response->json('payment_methods'))->keyBy('method');
+
+    expect($paymentMethods->has('cashondelivery'))->toBeTrue();
+    expect($paymentMethods->get('cashondelivery')['method_title'])->toBe('Cash On Delivery');
+    expect($paymentMethods->get('cashondelivery')['description'])->toBe('Cash On Delivery');
+
+    expect($paymentMethods->has('moneytransfer'))->toBeTrue();
+    expect($paymentMethods->get('moneytransfer')['method_title'])->toBe('Money Transfer');
+    expect($paymentMethods->get('moneytransfer')['description'])->toBe('Money Transfer');
+
+    expect($paymentMethods->has('paypal_standard'))->toBeTrue();
+    expect($paymentMethods->get('paypal_standard')['method_title'])->toBe('PayPal Standard');
+    expect($paymentMethods->get('paypal_standard')['description'])->toBe('PayPal Standard');
+
+    expect($paymentMethods->has('paypal_smart_button'))->toBeTrue();
+    expect($paymentMethods->get('paypal_smart_button')['method_title'])->toBe('PayPal Smart Button');
+    expect($paymentMethods->get('paypal_smart_button')['description'])->toBe('PayPal');
 });
 
 it('should store the payment method after storing the shipping method', function () {

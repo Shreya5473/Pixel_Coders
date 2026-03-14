@@ -23,11 +23,12 @@
 }
 .glass-card-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 @media (max-width: 1200px) { .glass-card-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px)  { .glass-card-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@media (max-width: 520px)  { .glass-card-grid { grid-template-columns: 1fr; } }
 
 .collection-card-link {
     text-decoration: none;
@@ -52,31 +53,37 @@
     flex-direction: column;
 }
 .glass-collection-card .card-image-wrap {
-    height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 5rem;
+    height: 360px;
     position: relative;
     overflow: hidden;
 }
-.glass-collection-card:nth-child(7n+1) .card-image-wrap { background: linear-gradient(135deg, rgba(221,242,230,0.85), rgba(207,233,219,0.70)); }
-.glass-collection-card:nth-child(7n+2) .card-image-wrap { background: linear-gradient(135deg, rgba(220,231,246,0.85), rgba(207,224,244,0.70)); }
-.glass-collection-card:nth-child(7n+3) .card-image-wrap { background: linear-gradient(135deg, rgba(230,226,248,0.85), rgba(218,213,244,0.70)); }
-.glass-collection-card:nth-child(7n+4) .card-image-wrap { background: linear-gradient(135deg, rgba(246,231,210,0.85), rgba(241,217,184,0.70)); }
-.glass-collection-card:nth-child(7n+5) .card-image-wrap { background: linear-gradient(135deg, rgba(217,239,233,0.85), rgba(203,230,223,0.70)); }
-.glass-collection-card:nth-child(7n+6) .card-image-wrap { background: linear-gradient(135deg, rgba(241,243,246,0.85), rgba(231,235,240,0.70)); }
-.glass-collection-card:nth-child(7n+7) .card-image-wrap { background: linear-gradient(135deg, rgba(221,242,230,0.85), rgba(220,231,246,0.70)); }
+.glass-collection-card .card-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.06) 45%, rgba(0,0,0,0.05) 100%);
+}
+.glass-collection-card .card-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}
 .glass-collection-card .card-label {
-    padding: 16px 18px;
-    background: rgba(255,255,255,0.18);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255,255,255,0.32);
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(6px);
 }
 .glass-collection-card .card-title {
     font-family: 'Fraunces', serif;
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: #2F3A45;
     margin-bottom: 4px;
 }
@@ -94,50 +101,65 @@
 </style>
 
 <div class="glass-collections-section container">
-    <h2 class="section-heading">Our Collections</h2>
-    <p class="section-subtitle">Curated fashion collections for every little one</p>
+    <h2 class="section-heading">Collections</h2>
+    <p class="section-subtitle">Tap a collection to open the same category pages available in the top menu</p>
+
+    @php
+        $collections = [
+            [
+                'title' => 'Clothes',
+                'url' => url('/kids-clothing'),
+                'image' => 'images/collections/Clothes/Black/Black1.jpg',
+            ],
+            [
+                'title' => 'Costumes',
+                'url' => url('/costumes'),
+                'image' => 'images/collections/Costumes/Yellow/COSTUME YELLOW 2.jpg',
+            ],
+            [
+                'title' => 'Hats',
+                'url' => url('/hats'),
+                'image' => 'images/collections/Hats/Red/RED HAT1.jpg',
+            ],
+            [
+                'title' => 'Pants',
+                'url' => url('/pants'),
+                'image' => 'images/collections/Pants/White/PANTS WHITE 1.jpg',
+            ],
+            [
+                'title' => 'Sweaters',
+                'url' => url('/sweaters'),
+                'image' => 'images/collections/Sweaters/Black/BLACK S1.jpg',
+            ],
+        ];
+
+        $encodedAsset = fn (string $relativePath) => asset(
+            collect(explode('/', $relativePath))
+                ->map(fn (string $segment) => rawurlencode($segment))
+                ->implode('/')
+        );
+    @endphp
+
     <div class="glass-card-grid">
-        <a href="{{ url('/kids-clothing') }}" class="collection-card-link" aria-label="Kids Clothing">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">👗</div>
-                <div class="card-label"><div class="card-title">Kids Clothing</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
-        <a href="{{ url('/hats') }}" class="collection-card-link" aria-label="Hats">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">🎩</div>
-                <div class="card-label"><div class="card-title">Hats</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
-        <a href="{{ url('/sweaters') }}" class="collection-card-link" aria-label="Sweaters">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">🧥</div>
-                <div class="card-label"><div class="card-title">Sweaters</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
-        <a href="{{ url('/costumes') }}" class="collection-card-link" aria-label="Costumes">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">🎭</div>
-                <div class="card-label"><div class="card-title">Costumes</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
-        <a href="{{ url('/jackets') }}" class="collection-card-link" aria-label="Outerwear">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">🧣</div>
-                <div class="card-label"><div class="card-title">Outerwear</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
-        <a href="{{ url('/t-shirts') }}" class="collection-card-link" aria-label="T-Shirts">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">👕</div>
-                <div class="card-label"><div class="card-title">T-Shirts</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
-        <a href="{{ url('/pants') }}" class="collection-card-link" aria-label="Pants">
-            <div class="glass-collection-card">
-                <div class="card-image-wrap">👖</div>
-                <div class="card-label"><div class="card-title">Pants</div><div class="card-sub">Shop now</div></div>
-            </div>
-        </a>
+        @foreach ($collections as $collection)
+            <a href="{{ $collection['url'] }}" class="collection-card-link" aria-label="{{ $collection['title'] }}">
+                <div class="glass-collection-card">
+                    <div class="card-image-wrap">
+                        <img
+                            class="card-image"
+                            src="{{ $encodedAsset($collection['image']) }}"
+                            alt="{{ $collection['title'] }}"
+                            loading="lazy"
+                            decoding="async"
+                        />
+
+                        <div class="card-label">
+                            <div class="card-title">{{ $collection['title'] }}</div>
+                            <div class="card-sub">View collection</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        @endforeach
     </div>
 </div>

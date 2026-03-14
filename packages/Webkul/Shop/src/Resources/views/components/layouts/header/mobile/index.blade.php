@@ -23,16 +23,9 @@
 
             <a
                 href="{{ route('shop.home.index') }}"
-                class="max-h-[30px]"
-                aria-label="@lang('shop::app.components.layouts.header.mobile.bagisto')"
-            >
-                <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
-                    alt="{{ config('app.name') }}"
-                    width="131"
-                    height="29"
-                >
-            </a>
+                style="display:flex;align-items:center;gap:8px;font:500 18px/1 'Fraunces',serif;color:#2F3A45;text-decoration:none;letter-spacing:0.04em;"
+                aria-label="BAGISTO Home"
+            ><img src="{{ asset('images/acm-logo.png') }}" alt="ACM Logo" style="width:22px;height:22px;object-fit:contain;border-radius:6px;" loading="lazy" decoding="async" />BAGISTO</a>
 
             {!! view_render_event('bagisto.shop.components.layouts.header.mobile.logo.after') !!}
         </div>
@@ -56,7 +49,12 @@
                 {!! view_render_event('bagisto.shop.components.layouts.header.mobile.mini_cart.before') !!}
 
                 @if(core()->getConfigData('sales.checkout.shopping_cart.cart_page'))
-                    @include('shop::checkout.cart.mini-cart')
+                    <a
+                        href="{{ route('shop.checkout.cart.index') }}"
+                        aria-label="@lang('shop::app.checkout.cart.mini-cart.shopping-cart')"
+                    >
+                        <span class="text-2xl cursor-pointer icon-cart"></span>
+                    </a>
                 @endif
 
                 {!! view_render_event('bagisto.shop.components.layouts.header.mobile.mini_cart.after') !!}
@@ -514,12 +512,34 @@
             },
 
             methods: {
+                sanitizeCategories(categories = []) {
+                    return categories
+                        .filter((category) => {
+                            const slug = String(category.slug || category.url_path || '').toLowerCase();
+                            const name = String(category.name || '').toLowerCase();
+
+                            return ! ['t-shirts', 't shirts', 'outwear', 'outerwear'].includes(name)
+                                && slug !== 't-shirts'
+                                && ! slug.endsWith('/t-shirts')
+                                && slug !== 'outwear'
+                                && slug !== 'outerwear'
+                                && ! slug.endsWith('/outwear')
+                                && ! slug.endsWith('/outerwear')
+                                && slug !== 'jackets'
+                                && ! slug.endsWith('/jackets');
+                        })
+                        .map((category) => ({
+                            ...category,
+                            children: this.sanitizeCategories(category.children || []),
+                        }));
+                },
+
                 initCategories() {
                     try {
                         const stored = localStorage.getItem('categories');
 
                         if (stored) {
-                            this.categories = JSON.parse(stored);
+                            this.categories = this.sanitizeCategories(JSON.parse(stored));
                             this.isLoading = false;
                             return;
                         }
@@ -531,7 +551,7 @@
                 getCategories() {
                     this.$axios.get("{{ route('shop.api.categories.tree') }}")
                         .then(response => {
-                            this.categories = response.data.data;
+                            this.categories = this.sanitizeCategories(response.data.data || []);
                             localStorage.setItem('categories', JSON.stringify(this.categories));
                         })
                         .catch(error => {

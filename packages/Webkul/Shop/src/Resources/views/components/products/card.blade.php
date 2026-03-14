@@ -439,6 +439,8 @@
                                 this.$emitter.emit('update-mini-cart', response.data.data );
 
                                 this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+
+                                window.location.href = "{{ route('shop.checkout.cart.index') }}";
                             } else {
                                 this.$emitter.emit('add-flash', { type: 'warning', message: response.data.data.message });
                             }

@@ -23,21 +23,29 @@
         {{ trim($category->meta_title) != "" ? $category->meta_title : $category->name }}
     </x-slot>
 
+    @php
+        $categorySlug = $category->slug ?? '';
+
+        $fallbackCategoryHero = [
+            'kids-clothing' => 'images/collections/Clothes/Black/Black1.jpg',
+            'hats' => 'images/collections/Hats/Red/RED HAT1.jpg',
+            'costumes' => 'images/collections/Costumes/Yellow/COSTUME YELLOW 2.jpg',
+            'sweaters' => 'images/collections/Sweaters/Black/BLACK S1.jpg',
+            'outwear' => 'images/collections/Outwear/Red/RED O1.jpg',
+            'jackets' => 'images/collections/Outwear/Red/RED O1.jpg',
+            'pants' => 'images/collections/Pants/White/PANTS WHITE 1.jpg',
+        ][$categorySlug] ?? null;
+
+        $fallbackCategoryHeroUrl = $fallbackCategoryHero
+            ? asset(
+                collect(explode('/', $fallbackCategoryHero))
+                    ->map(fn (string $segment) => rawurlencode($segment))
+                    ->implode('/')
+            )
+            : null;
+    @endphp
+
     {!! view_render_event('bagisto.shop.categories.view.banner_path.before') !!}
-
-    <!-- Hero Image -->
-    @if ($category->banner_path)
-        <div class="container mt-8 px-[60px] max-lg:px-8 max-md:mt-4 max-md:px-4">
-            <x-shop::media.images.lazy
-                class="aspect-[4/1] max-h-full max-w-full rounded-xl"
-                src="{{ $category->banner_url }}"
-                alt="{{ $category->name }}"
-                width="1320"
-                height="300"
-            />
-        </div>
-    @endif
-
     {!! view_render_event('bagisto.shop.categories.view.banner_path.after') !!}
 
     {!! view_render_event('bagisto.shop.categories.view.description.before') !!}
@@ -129,10 +137,10 @@
                         </div>
 
                         <!-- Product Grid Card Container -->
-                        <div v-else class="mt-8 max-md:mt-5">
+                        <div v-else>
                             <!-- Product Card Shimmer Effect -->
                             <template v-if="isLoading">
-                                <div class="grid grid-cols-4 gap-6 max-1280:grid-cols-3 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
+                                <div class="mt-8 grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:gap-x-4 max-sm:mt-5 max-sm:justify-items-center max-sm:gap-y-5">
                                     <x-shop::shimmer.products.cards.grid count="12" />
                                 </div>
                             </template>
@@ -142,7 +150,7 @@
                             <!-- Product Card Listing -->
                             <template v-else>
                                 <template v-if="products.length">
-                                    <div class="grid grid-cols-4 gap-6 max-1280:grid-cols-3 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
+                                    <div class="mt-8 grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:mt-5 max-md:justify-items-center max-md:gap-x-4 max-md:gap-y-5">
                                         <x-shop::products.card
                                             ::mode="'grid'"
                                             v-for="product in products"
@@ -247,6 +255,10 @@
                     queryString() {
                         return this.jsonToQueryString(this.queryParams);
                     },
+                },
+
+                mounted() {
+                    this.getProducts();
                 },
 
                 watch: {

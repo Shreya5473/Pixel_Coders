@@ -1,14 +1,14 @@
 {
-  "resources/css/app.css": {
+  "frontend/src/css/app.css": {
     "file": "assets/app-l0sNRNKZ.js",
     "name": "app",
-    "src": "resources/css/app.css",
+    "src": "frontend/src/css/app.css",
     "isEntry": true
   },
-  "resources/js/app.js": {
+  "frontend/src/js/app.js": {
     "file": "assets/app-BuG9aa18.js",
     "name": "app",
-    "src": "resources/js/app.js",
+    "src": "frontend/src/js/app.js",
     "isEntry": true
   }
 }

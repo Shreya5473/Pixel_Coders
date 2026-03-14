@@ -28,12 +28,7 @@
                     class="flex min-h-[30px]"
                     aria-label="@lang('shop::app.checkout.cart.index.bagisto')"
                 >
-                    <img
-                        src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
-                        alt="{{ config('app.name') }}"
-                        width="131"
-                        height="29"
-                    >
+                    <span class="font-fraunces text-[32px] leading-none tracking-[0.04em] text-[#2F3A45] max-md:text-[24px]">BAGISTO</span>
                 </a>
 
                 {!! view_render_event('bagisto.shop.checkout.cart.logo.after') !!}

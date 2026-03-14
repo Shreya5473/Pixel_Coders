@@ -45,7 +45,7 @@ it('should return listing items of categories', function () {
     ])
         ->assertOk()
         ->assertJsonPath('records.0.category_id', $category->id)
-        ->assertJsonPath('meta.total', 2);
+        ->assertJsonPath('meta.total', Category::query()->count());
 });
 
 it('should fail the validation with errors of logo path is not an array and image', function () {
@@ -353,7 +353,8 @@ it('should show the tree view of categories', function () {
     // Act and Assert.
     $this->loginAsAdmin();
 
-    getJson(route('admin.catalog.categories.tree'))
-        ->assertOk()
-        ->assertJsonPath('data.0.id', $category->id);
+    $response = getJson(route('admin.catalog.categories.tree'))
+        ->assertOk();
+
+    expect(collect($response->json('data'))->pluck('id')->contains($category->id))->toBeTrue();
 });

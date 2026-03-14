@@ -20,27 +20,15 @@
                 <x-slot:toggle>
                     {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.toggle.before') !!}
 
-                    <span class="relative">
-                        <span
-                            class="icon-cart cursor-pointer text-2xl"
-                            role="button"
-                            aria-label="@lang('shop::app.checkout.cart.mini-cart.shopping-cart')"
-                            tabindex="0"
-                            @click="getCart"
-                        ></span>
+                    <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.28);border:1px solid rgba(255,255,255,0.42);transition:all 0.2s;cursor:pointer;" onmouseover="this.style.background='rgba(255,255,255,0.48)'" onmouseout="this.style.background='rgba(255,255,255,0.28)'" @click="getCart">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7684" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
 
                         @if (core()->getConfigData('sales.checkout.my_cart.summary') == 'display_item_quantity')
-                            <span
-                                class="absolute -top-4 rounded-[44px] bg-navyBlue px-2 py-1.5 text-xs font-semibold leading-[9px] text-white ltr:left-5 rtl:right-5 max-md:ltr:left-4 max-md:rtl:right-4"
-                                v-if="cart?.items_qty"
-                            >
+                            <span style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;background:rgba(160,140,230,0.72);border:1.5px solid rgba(255,255,255,0.85);border-radius:50%;font:600 9px/18px 'DM Sans';color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;" v-if="cart?.items_qty">
                                 @{{ cart.items_qty }}
                             </span>
                         @else
-                            <span
-                                class="absolute -top-4 rounded-[44px] bg-navyBlue px-2 py-1.5 text-xs font-semibold leading-[9px] text-white ltr:left-5 rtl:right-5 max-md:px-2 max-md:py-1.5 max-md:ltr:left-4 max-md:rtl:right-4"
-                                v-if="cart?.items_count"
-                            >
+                            <span style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;background:rgba(160,140,230,0.72);border:1.5px solid rgba(255,255,255,0.85);border-radius:50%;font:600 9px/18px 'DM Sans';color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;" v-if="cart?.items_count">
                                 @{{ cart.items_count }}
                             </span>
                         @endif
@@ -53,15 +41,14 @@
                 <x-slot:header>
                     {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.header.before') !!}
 
-                    <div class="flex items-center justify-between">
-                        <p class="text-2xl font-medium max-md:text-xl max-sm:text-xl">
-                            @lang('shop::app.checkout.cart.mini-cart.shopping-cart')
-                        </p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <p style="font:500 20px/1 'Fraunces',serif;color:#2F3A45;margin:0;">Your Cart</p>
+                        <span v-if="cart?.items_count" style="background:rgba(160,140,230,0.22);border:1px solid rgba(160,140,230,0.35);border-radius:20px;padding:4px 12px;font:600 11px/1 'DM Sans';color:#7060A8;">@{{ cart.items_count }} @{{ cart.items_count !== 1 ? 'items' : 'item' }}</span>
                     </div>
 
-                    <p class="text-base max-md:text-zinc-500 max-sm:text-xs">
-                        {{ core()->getConfigData('sales.checkout.mini_cart.offer_info')}}
-                    </p>
+                    @if(core()->getConfigData('sales.checkout.mini_cart.offer_info'))
+                        <p style="font:400 12px 'DM Sans';color:#8A95A3;margin:8px 0 0;">{{ core()->getConfigData('sales.checkout.mini_cart.offer_info') }}</p>
+                    @endif
 
                     {!! view_render_event('bagisto.shop.checkout.mini-cart.drawer.header.after') !!}
                 </x-slot>
@@ -331,16 +318,16 @@
 
                         <a
                             href="{{ route('shop.checkout.onepage.index') }}"
-                            class="mx-auto block w-full cursor-pointer rounded-2xl bg-navyBlue px-11 py-4 text-center text-base font-medium text-white max-md:rounded-lg max-md:px-5 max-md:py-2"
+                            style="display:block;width:100%;text-align:center;padding:16px 24px;background:rgba(160,140,230,0.22);border:1px solid rgba(160,140,230,0.42);border-radius:12px;font:700 11px/1 'DM Sans';letter-spacing:0.18em;text-transform:uppercase;color:#7060A8;text-decoration:none;transition:all 0.2s;backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(160,140,230,0.38)'" onmouseout="this.style.background='rgba(160,140,230,0.22)'"
                         >
-                            @lang('shop::app.checkout.cart.mini-cart.continue-to-checkout')
+                            Checkout
                         </a>
 
                             {!! view_render_event('bagisto.shop.checkout.mini-cart.continue_to_checkout.after') !!}
 
-                            <div class="block cursor-pointer text-center text-base font-medium max-md:py-1.5">
-                                <a href="{{ route('shop.checkout.cart.index') }}">
-                                    @lang('shop::app.checkout.cart.mini-cart.view-cart')
+                            <div style="text-align:center;margin-top:10px;">
+                                <a href="{{ route('shop.checkout.cart.index') }}" style="font:500 11px/1 'DM Sans';letter-spacing:0.12em;text-transform:uppercase;color:#8A95A3;text-decoration:underline;text-underline-offset:3px;transition:color 0.2s;" onmouseover="this.style.color='#2F3A45'" onmouseout="this.style.color='#8A95A3'">
+                                    View Cart →
                                 </a>
                             </div>
                         </div>

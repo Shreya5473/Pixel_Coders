@@ -76,7 +76,7 @@
             href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap"
         />
 
-        <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}?v={{ filemtime(public_path('css/glassmorphism.css')) }}" />
 
         @stack('styles')
 
@@ -131,7 +131,7 @@
             {!! view_render_event('bagisto.shop.layout.content.before') !!}
 
             <!-- Page Content Blade Component -->
-            <main id="main" class="bg-white">
+            <main id="main">
                 {{ $slot }}
             </main>
 

@@ -1,660 +1,138 @@
 {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.before') !!}
 
-<div class="flex min-h-[78px] w-full justify-between border border-b border-l-0 border-r-0 border-t-0 px-[60px] max-1180:px-8">
-    <!--
-        This section will provide categories for the first, second, and third levels. If
-        additional levels are required, users can customize them according to their needs.
-    -->
-    <!-- Left Nagivation Section -->
-    <div class="flex items-center gap-x-10 max-[1180px]:gap-x-5">
-        {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.before') !!}
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 28px;min-height:72px;gap:24px;">
 
-        <a
-            href="{{ route('shop.home.index') }}"
-            aria-label="@lang('shop::app.components.layouts.header.desktop.bottom.bagisto')"
-        >
-            <img
-                src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
-                width="131"
-                height="29"
-                alt="{{ config('app.name') }}"
-            >
+    {{-- ── Left: Brand ──────────────────────────────────────────────── --}}
+    <div style="flex-shrink:0;">
+        <a href="{{ route('shop.home.index') }}" style="display:flex;align-items:center;gap:10px;font:500 20px/1 'Fraunces',serif;color:#2F3A45;text-decoration:none;letter-spacing:0.04em;" aria-label="BAGISTO Home">
+            <img src="{{ asset('images/acm-logo.png') }}" alt="ACM Logo" style="width:26px;height:26px;object-fit:contain;border-radius:8px;" loading="lazy" decoding="async" />
+            BAGISTO
         </a>
-
-        {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.after') !!}
-
-        {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.before') !!}
-
-        <v-desktop-category>
-            <div class="flex items-center gap-5">
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-            </div>
-        </v-desktop-category>
-
-        {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.after') !!}
     </div>
 
-    <!-- Right Nagivation Section -->
-    <div class="flex items-center gap-x-9 max-[1100px]:gap-x-6 max-lg:gap-x-8">
+    {{-- ── Center: Nav Links ────────────────────────────────────────── --}}
+    <nav style="display:flex;align-items:center;gap:6px;flex:1;justify-content:center;" aria-label="Main navigation">
+        <a href="{{ route('shop.home.index') }}" style="font:500 12px/1 'DM Sans',sans-serif;color:#6B7684;text-decoration:none;letter-spacing:0.06em;padding:8px 12px;border-radius:8px;transition:all 0.18s ease;white-space:nowrap;" onmouseover="this.style.color='#2F3A45';this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.color='#6B7684';this.style.background='transparent'">Home</a>
+        <span style="color:rgba(180,180,180,0.55);font-size:11px;">|</span>
+        @php
+            $navCategories = [
+                ['label' => 'Clothes',   'url' => '/kids-clothing'],
+                ['label' => 'Hats',      'url' => '/hats'],
+                ['label' => 'Sweaters',  'url' => '/sweaters'],
+                ['label' => 'Pants',     'url' => '/pants'],
+                ['label' => 'Costumes',  'url' => '/costumes'],
+            ];
+        @endphp
+        @foreach($navCategories as $nc)
+            <a href="{{ $nc['url'] }}" style="font:500 11px/1 'DM Sans',sans-serif;color:#6B7684;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:8px 10px;border-radius:8px;transition:all 0.18s ease;white-space:nowrap;" onmouseover="this.style.color='#2F3A45';this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.color='#6B7684';this.style.background='transparent'">{{ $nc['label'] }}</a>
+        @endforeach
+    </nav>
+
+    {{-- ── Right: Search + Cart + User ─────────────────────────────── --}}
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.before') !!}
 
-        <!-- Search Bar Container -->
-        <div class="relative w-full">
-            <form
-                action="{{ route('shop.search.index') }}"
-                class="flex max-w-[445px] items-center"
-                role="search"
-            >
-                <label
-                    for="organic-search"
-                    class="sr-only"
-                >
-                    @lang('shop::app.components.layouts.header.desktop.bottom.search')
-                </label>
-
-                <div class="icon-search pointer-events-none absolute top-2.5 flex items-center text-xl ltr:left-3 rtl:right-3"></div>
-
-                <input
-                    type="text"
-                    name="query"
-                    value="{{ request('query') }}"
-                    class="block w-full py-3 text-xs font-medium text-gray-900 transition-all border border-transparent rounded-lg bg-zinc-100 px-11 hover:border-gray-400 focus:border-gray-400"
-                    list="shop-search-suggestions"
-                    data-search-suggestions-url="{{ route('shop.search.suggestions') }}"
-                    autocomplete="off"
-                    minlength="{{ core()->getConfigData('catalog.products.search.min_query_length') }}"
-                    maxlength="{{ core()->getConfigData('catalog.products.search.max_query_length') }}"
-                    placeholder="@lang('shop::app.components.layouts.header.desktop.bottom.search-text')"
-                    aria-label="@lang('shop::app.components.layouts.header.desktop.bottom.search-text')"
-                    aria-required="true"
-                    pattern="[^\\]+"
-                    required
-                >
-
-                <button
-                    type="submit"
-                    class="hidden"
-                    aria-label="@lang('shop::app.components.layouts.header.desktop.bottom.submit')"
-                >
-                </button>
-
-                @if (core()->getConfigData('catalog.products.settings.image_search'))
-                    @include('shop::search.images.index')
-                @endif
-            </form>
-
-            <datalist id="shop-search-suggestions"></datalist>
-        </div>
+        {{-- Search ─────────────────────────────────────────────────── --}}
+        <form action="{{ route('shop.search.index') }}" style="position:relative;display:flex;align-items:center;" role="search">
+            <label for="organic-search" class="sr-only">Search</label>
+            <div style="position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A95A3" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <input
+                type="text"
+                id="organic-search"
+                name="query"
+                value="{{ request('query') }}"
+                list="shop-search-suggestions"
+                data-search-suggestions-url="{{ route('shop.search.suggestions') }}"
+                autocomplete="off"
+                minlength="{{ core()->getConfigData('catalog.products.search.min_query_length') }}"
+                maxlength="{{ core()->getConfigData('catalog.products.search.max_query_length') }}"
+                placeholder="Search…"
+                aria-label="Search"
+                pattern="[^\\]+"
+                required
+                style="background:rgba(255,255,255,0.40);border:1px solid rgba(255,255,255,0.55);border-radius:12px;padding:9px 14px 9px 36px;font:400 13px/1 'DM Sans',sans-serif;color:#2F3A45;width:200px;outline:none;transition:all 0.2s ease;backdrop-filter:blur(10px);"
+                onfocus="this.style.width='260px';this.style.borderColor='rgba(160,140,230,0.52)'"
+                onblur="this.style.width='200px';this.style.borderColor='rgba(255,255,255,0.55)'"
+            />
+            <button type="submit" class="hidden" aria-label="Submit search"></button>
+        </form>
+        <datalist id="shop-search-suggestions"></datalist>
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.after') !!}
 
-        <!-- Right Navigation Links -->
-        <div class="mt-1.5 flex gap-x-8 max-[1100px]:gap-x-6 max-lg:gap-x-8">
+        {{-- Compare ─────────────────────────────────────────────────── --}}
+        @if(core()->getConfigData('catalog.products.settings.compare_option'))
+            <a href="{{ route('shop.compare.index') }}" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.28);border:1px solid rgba(255,255,255,0.42);transition:all 0.2s;text-decoration:none;" aria-label="Compare" onmouseover="this.style.background='rgba(255,255,255,0.48)'" onmouseout="this.style.background='rgba(255,255,255,0.28)'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7684" stroke-width="1.8"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            </a>
+        @endif
 
-            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.compare.before') !!}
+        {{-- Cart ────────────────────────────────────────────────────── --}}
+        @if(core()->getConfigData('sales.checkout.shopping_cart.cart_page'))
+            <a href="{{ route('shop.checkout.cart.index') }}" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.28);border:1px solid rgba(255,255,255,0.42);transition:all 0.2s;text-decoration:none;" aria-label="Cart" onmouseover="this.style.background='rgba(255,255,255,0.48)'" onmouseout="this.style.background='rgba(255,255,255,0.28)'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7684" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </a>
+        @endif
 
-            <!-- Compare -->
-            @if(core()->getConfigData('catalog.products.settings.compare_option'))
-                <a
-                    href="{{ route('shop.compare.index') }}"
-                    aria-label="@lang('shop::app.components.layouts.header.desktop.bottom.compare')"
-                >
-                    <span
-                        class="inline-block text-2xl cursor-pointer icon-compare"
-                        role="presentation"
-                    ></span>
+        {{-- User / Profile ──────────────────────────────────────────── --}}
+        @auth('customer')
+            <div style="position:relative;" class="profile-dropdown-wrap">
+                <a href="{{ route('shop.customers.account.profile.index') }}" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:rgba(160,140,230,0.18);border:1px solid rgba(160,140,230,0.35);transition:all 0.2s;text-decoration:none;" aria-label="My Account" onmouseover="this.style.background='rgba(160,140,230,0.30)'" onmouseout="this.style.background='rgba(160,140,230,0.18)'">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7060A8" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </a>
-            @endif
-
-            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.compare.after') !!}
-
-            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.mini_cart.before') !!}
-
-            <!-- Mini cart -->
-            @if(core()->getConfigData('sales.checkout.shopping_cart.cart_page'))
-                @include('shop::checkout.cart.mini-cart')
-            @endif
-
-            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.mini_cart.after') !!}
-
-            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile.before') !!}
-
-            <!-- user profile -->
-            <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
-                <x-slot:toggle>
-                    <span
-                        class="inline-block text-2xl cursor-pointer icon-users"
-                        role="button"
-                        aria-label="@lang('shop::app.components.layouts.header.desktop.bottom.profile')"
-                        tabindex="0"
-                    ></span>
-                </x-slot>
-
-                <!-- Guest Dropdown -->
-                @guest('customer')
-                    <x-slot:content>
-                        <div class="grid gap-2.5">
-                            <p class="text-xl font-dmserif">
-                                @lang('shop::app.components.layouts.header.desktop.bottom.welcome-guest')
-                            </p>
-
-                            <p class="text-sm">
-                                @lang('shop::app.components.layouts.header.desktop.bottom.dropdown-text')
-                            </p>
-                        </div>
-
-                        <p class="w-full mt-3 border border-zinc-200"></p>
-
-                        {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.customers_action.before') !!}
-
-                        <div class="flex gap-4 mt-6">
-                            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.sign_in_button.before') !!}
-
-                            <a
-                                href="{{ route('shop.customer.session.create') }}"
-                                class="block m-0 mx-auto text-base text-center primary-button w-max rounded-2xl px-7 max-md:rounded-lg ltr:ml-0 rtl:mr-0"
-                            >
-                                @lang('shop::app.components.layouts.header.desktop.bottom.sign-in')
-                            </a>
-
-                            <a
-                                href="{{ route('shop.customers.register.index') }}"
-                                class="block m-0 mx-auto text-base text-center border-2 secondary-button w-max rounded-2xl px-7 max-md:rounded-lg max-md:py-3 ltr:ml-0 rtl:mr-0"
-                            >
-                                @lang('shop::app.components.layouts.header.desktop.bottom.sign-up')
-                            </a>
-
-                            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.sign_up_button.after') !!}
-                        </div>
-
-                        {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.customers_action.after') !!}
-                    </x-slot>
-                @endguest
-
-                <!-- Customers Dropdown -->
-                @auth('customer')
-                    <x-slot:content class="!p-0">
-                        <div class="grid gap-2.5 p-5 pb-0">
-                            <p class="text-xl font-dmserif" v-pre>
-                                @lang('shop::app.components.layouts.header.desktop.bottom.welcome')’
-                                {{ auth()->guard('customer')->user()->first_name }}
-                            </p>
-
-                            <p class="text-sm">
-                                @lang('shop::app.components.layouts.header.desktop.bottom.dropdown-text')
-                            </p>
-                        </div>
-
-                        <p class="w-full mt-3 border border-zinc-200"></p>
-
-                        <div class="mt-2.5 grid gap-1 pb-2.5">
-                            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile_dropdown.links.before') !!}
-
-                            <a
-                                class="px-5 py-2 text-base cursor-pointer hover:bg-gray-100"
-                                href="{{ route('shop.customers.account.profile.index') }}"
-                            >
-                                @lang('shop::app.components.layouts.header.desktop.bottom.profile')
-                            </a>
-
-                            <a
-                                class="px-5 py-2 text-base cursor-pointer hover:bg-gray-100"
-                                href="{{ route('shop.customers.account.orders.index') }}"
-                            >
-                                @lang('shop::app.components.layouts.header.desktop.bottom.orders')
-                            </a>
-
-                            @if (core()->getConfigData('customer.settings.wishlist.wishlist_option'))
-                                <a
-                                    class="px-5 py-2 text-base cursor-pointer hover:bg-gray-100"
-                                    href="{{ route('shop.customers.account.wishlist.index') }}"
-                                >
-                                    @lang('shop::app.components.layouts.header.desktop.bottom.wishlist')
-                                </a>
-                            @endif
-
-                            <!--Customers logout-->
-                            @auth('customer')
-                                <x-shop::form
-                                    method="DELETE"
-                                    action="{{ route('shop.customer.session.destroy') }}"
-                                    id="customerLogout"
-                                />
-
-                                <a
-                                    class="px-5 py-2 text-base cursor-pointer hover:bg-gray-100"
-                                    href="{{ route('shop.customer.session.destroy') }}"
-                                    onclick="event.preventDefault(); document.getElementById('customerLogout').submit();"
-                                >
-                                    @lang('shop::app.components.layouts.header.desktop.bottom.logout')
-                                </a>
-                            @endauth
-
-                            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile_dropdown.links.after') !!}
-                        </div>
-                    </x-slot>
-                @endauth
-            </x-shop::dropdown>
-
-            {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile.after') !!}
-        </div>
+                <div class="profile-dropdown" style="display:none;position:absolute;top:calc(100% + 10px);right:0;min-width:180px;background:rgba(255,255,255,0.85);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.55);border-radius:16px;box-shadow:0 16px 48px rgba(100,120,160,0.22);padding:8px;z-index:1100;">
+                    <a href="{{ route('shop.customers.account.profile.index') }}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font:400 13px/1 'DM Sans';color:#2F3A45;text-decoration:none;transition:background 0.15s;" onmouseover="this.style.background='rgba(160,140,230,0.12)'" onmouseout="this.style.background='transparent'">My Profile</a>
+                    <a href="{{ route('shop.customers.account.orders.index') }}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font:400 13px/1 'DM Sans';color:#2F3A45;text-decoration:none;transition:background 0.15s;" onmouseover="this.style.background='rgba(160,140,230,0.12)'" onmouseout="this.style.background='transparent'">My Orders</a>
+                    <a href="{{ route('shop.customers.account.wishlist.index') }}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font:400 13px/1 'DM Sans';color:#2F3A45;text-decoration:none;transition:background 0.15s;" onmouseover="this.style.background='rgba(160,140,230,0.12)'" onmouseout="this.style.background='transparent'">Wishlist</a>
+                    <div style="height:1px;background:rgba(255,255,255,0.45);margin:6px 10px;"></div>
+                    <a href="{{ route('shop.customer.session.destroy') }}" onclick="event.preventDefault();document.getElementById('nav-logout-form').submit();" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font:400 13px/1 'DM Sans';color:#8A5A3A;text-decoration:none;transition:background 0.15s;" onmouseover="this.style.background='rgba(246,231,210,0.40)'" onmouseout="this.style.background='transparent'">Sign Out</a>
+                    <form id="nav-logout-form" action="{{ route('shop.customer.session.destroy') }}" method="POST" style="display:none;">@csrf @method('DELETE')</form>
+                </div>
+            </div>
+        @else
+            <a href="{{ route('shop.customer.session.create') }}" style="display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:12px;background:rgba(160,140,230,0.18);border:1px solid rgba(160,140,230,0.35);font:500 12px/1 'DM Sans';color:#7060A8;text-decoration:none;transition:all 0.2s;white-space:nowrap;" aria-label="Sign In" onmouseover="this.style.background='rgba(160,140,230,0.30)'" onmouseout="this.style.background='rgba(160,140,230,0.18)'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7060A8" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Sign In
+            </a>
+        @endauth
     </div>
 </div>
 
 @pushOnce('scripts')
-    <script
-        type="text/x-template"
-        id="v-desktop-category-template"
-    >
-        <!-- Loading State -->
-        <div
-            class="flex items-center gap-5"
-            v-if="isLoading"
-        >
-            <span
-                class="w-20 h-6 rounded shimmer"
-                role="presentation"
-            ></span>
-
-            <span
-                class="w-20 h-6 rounded shimmer"
-                role="presentation"
-            ></span>
-
-            <span
-                class="w-20 h-6 rounded shimmer"
-                role="presentation"
-            ></span>
-        </div>
-
-        <!-- Default category layout -->
-        <div
-            class="flex items-center"
-            v-else-if="'{{ core()->getConfigData('general.design.categories.category_view') }}' !== 'sidebar'"
-        >
-            <div
-                class="group relative flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue"
-                v-for="category in categories"
-            >
-                <span>
-                    <a
-                        :href="category.url"
-                        class="inline-block px-5 uppercase"
-                    >
-                        @{{ category.name }}
-                    </a>
-                </span>
-
-                <div
-                    class="pointer-events-none absolute top-[78px] z-[1] max-h-[580px] w-max max-w-[1260px] translate-y-1 overflow-auto overflow-x-auto border border-b-0 border-l-0 border-r-0 border-t border-[#F3F3F3] bg-white p-9 opacity-0 shadow-[0_6px_6px_1px_rgba(0,0,0,.3)] transition duration-300 ease-out group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-hover:duration-200 group-hover:ease-in ltr:-left-9 rtl:-right-9"
-                    v-if="category.children && category.children.length"
-                >
-                    <div class="flex justify-between gap-x-[70px]">
-                        <div
-                            class="grid w-full min-w-max max-w-[150px] flex-auto grid-cols-[1fr] content-start gap-5"
-                            v-for="pairCategoryChildren in pairCategoryChildren(category)"
-                        >
-                            <template v-for="secondLevelCategory in pairCategoryChildren">
-                                <p class="font-medium text-navyBlue">
-                                    <a :href="secondLevelCategory.url">
-                                        @{{ secondLevelCategory.name }}
-                                    </a>
-                                </p>
-
-                                <ul
-                                    class="grid grid-cols-[1fr] gap-3"
-                                    v-if="secondLevelCategory.children && secondLevelCategory.children.length"
-                                >
-                                    <li
-                                        class="text-sm font-medium text-zinc-500"
-                                        v-for="thirdLevelCategory in secondLevelCategory.children"
-                                    >
-                                        <a :href="thirdLevelCategory.url">
-                                            @{{ thirdLevelCategory.name }}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sidebar category layout -->
-        <div v-else>
-            <!-- Categories Navigation -->
-            <div class="flex items-center">
-                <!-- "All" button for opening the category drawer -->
-                <div
-                    class="flex h-[77px] cursor-pointer items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue"
-                    @click="toggleCategoryDrawer"
-                >
-                    <span class="flex items-center gap-1 px-5 uppercase">
-                        <span class="text-xl icon-hamburger"></span>
-
-                        @lang('shop::app.components.layouts.header.desktop.bottom.all')
-                    </span>
-                </div>
-
-                <!-- Show only first 4 categories in main navigation -->
-                <div
-                    class="group relative flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue"
-                    v-for="category in categories.slice(0, 4)"
-                >
-                    <span>
-                        <a
-                            :href="category.url"
-                            class="inline-block px-5 uppercase"
-                        >
-                            @{{ category.name }}
-                        </a>
-                    </span>
-
-                    <!-- Dropdown for each category -->
-                    <div
-                        class="pointer-events-none absolute top-[78px] z-[1] max-h-[580px] w-max max-w-[1260px] translate-y-1 overflow-auto overflow-x-auto border border-b-0 border-l-0 border-r-0 border-t border-[#F3F3F3] bg-white p-9 opacity-0 shadow-[0_6px_6px_1px_rgba(0,0,0,.3)] transition duration-300 ease-out group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-hover:duration-200 group-hover:ease-in ltr:-left-9 rtl:-right-9"
-                        v-if="category.children && category.children.length"
-                    >
-                        <div class="flex justify-between gap-x-[70px]">
-                            <div
-                                class="grid w-full min-w-max max-w-[150px] flex-auto grid-cols-[1fr] content-start gap-5"
-                                v-for="pairCategoryChildren in pairCategoryChildren(category)"
-                            >
-                                <template v-for="secondLevelCategory in pairCategoryChildren">
-                                    <p class="font-medium text-navyBlue">
-                                        <a :href="secondLevelCategory.url">
-                                            @{{ secondLevelCategory.name }}
-                                        </a>
-                                    </p>
-
-                                    <ul
-                                        class="grid grid-cols-[1fr] gap-3"
-                                        v-if="secondLevelCategory.children && secondLevelCategory.children.length"
-                                    >
-                                        <li
-                                            class="text-sm font-medium text-zinc-500"
-                                            v-for="thirdLevelCategory in secondLevelCategory.children"
-                                        >
-                                            <a :href="thirdLevelCategory.url">
-                                                @{{ thirdLevelCategory.name }}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bagisto Drawer Integration -->
-            <x-shop::drawer
-                position="left"
-                width="400px"
-                ::is-active="isDrawerActive"
-                @toggle="onDrawerToggle"
-                @close="onDrawerClose"
-            >
-                <x-slot:toggle></x-slot>
-
-                <x-slot:header class="border-b border-gray-200">
-                    <div class="flex items-center justify-between w-full">
-                        <p class="text-xl font-medium">
-                            @lang('shop::app.components.layouts.header.desktop.bottom.categories')
-                        </p>
-                    </div>
-                </x-slot>
-
-                <x-slot:content class="!px-0">
-                    <!-- Wrapper with transition effects -->
-                    <div class="relative h-full overflow-hidden">
-                        <!-- Sliding container -->
-                        <div
-                            class="flex h-full transition-transform duration-300"
-                            :class="{
-                                'ltr:translate-x-0 rtl:translate-x-0': currentViewLevel !== 'third',
-                                'ltr:-translate-x-full rtl:translate-x-full': currentViewLevel === 'third'
-                            }"
-                        >
-                            <!-- First level view -->
-                            <div class="h-[calc(100vh-74px)] w-full flex-shrink-0 overflow-auto">
-                                <div class="py-4">
-                                    <div
-                                        v-for="category in categories"
-                                        :key="category.id"
-                                        :class="{'mb-2': category.children && category.children.length}"
-                                    >
-                                        <div class="flex items-center justify-between px-6 py-2 transition-colors duration-200 cursor-pointer hover:bg-gray-100">
-                                            <a
-                                                :href="category.url"
-                                                class="text-base font-medium text-black"
-                                            >
-                                                @{{ category.name }}
-                                            </a>
-                                        </div>
-
-                                        <!-- Second Level Categories -->
-                                        <div v-if="category.children && category.children.length" >
-                                            <div
-                                                v-for="secondLevelCategory in category.children"
-                                                :key="secondLevelCategory.id"
-                                            >
-                                                <div
-                                                    class="flex items-center justify-between px-6 py-2 transition-colors duration-200 cursor-pointer hover:bg-gray-100"
-                                                    @click="showThirdLevel(secondLevelCategory, category, $event)"
-                                                >
-                                                    <a
-                                                        :href="secondLevelCategory.url"
-                                                        class="text-sm font-normal"
-                                                    >
-                                                        @{{ secondLevelCategory.name }}
-                                                    </a>
-
-                                                    <span
-                                                        v-if="secondLevelCategory.children && secondLevelCategory.children.length"
-                                                        class="icon-arrow-right rtl:icon-arrow-left"
-                                                    ></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Third level view -->
-                            <div
-                                class="flex-shrink-0 w-full h-full"
-                                v-if="currentViewLevel === 'third'"
-                            >
-                                <div class="px-6 py-4 border-b border-gray-200">
-                                    <button
-                                        @click="goBackToMainView"
-                                        class="flex items-center justify-center gap-2 focus:outline-none"
-                                        aria-label="Go back"
-                                    >
-                                        <span class="text-lg icon-arrow-left rtl:icon-arrow-right"></span>
-
-                                        <p class="text-base font-medium text-black">
-                                            @lang('shop::app.components.layouts.header.desktop.bottom.back-button')
-                                        </p>
-                                    </button>
-                                </div>
-
-                                <!-- Third Level Content -->
-                                <div class="py-4">
-                                    <div
-                                        v-for="thirdLevelCategory in currentSecondLevelCategory?.children"
-                                        :key="thirdLevelCategory.id"
-                                        class="mb-2"
-                                    >
-                                        <a
-                                            :href="thirdLevelCategory.url"
-                                            class="block px-6 py-2 text-sm transition-colors duration-200 hover:bg-gray-100"
-                                        >
-                                            @{{ thirdLevelCategory.name }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </x-slot>
-            </x-shop::drawer>
-        </div>
-    </script>
-
     <script type="module">
-        app.component('v-desktop-category', {
-            template: '#v-desktop-category-template',
-
-            data() {
-                return {
-                    isLoading: true,
-                    categories: [],
-                    isDrawerActive: false,
-                    currentViewLevel: 'main',
-                    currentSecondLevelCategory: null,
-                    currentParentCategory: null
-                }
-            },
-
-            mounted() {
-                this.initCategories();
-            },
-
-            methods: {
-                initCategories() {
+        // Search suggestions
+        document.querySelectorAll('input[name="query"][data-search-suggestions-url]').forEach(searchInput => {
+            const datalist = document.getElementById('shop-search-suggestions');
+            if (!datalist) return;
+            let debounceTimer = null;
+            searchInput.addEventListener('input', () => {
+                const term = searchInput.value.trim();
+                clearTimeout(debounceTimer);
+                if (term.length < 2) { datalist.innerHTML = ''; return; }
+                debounceTimer = setTimeout(async () => {
                     try {
-                        const stored = localStorage.getItem('categories');
-
-                        if (stored) {
-                            this.categories = JSON.parse(stored);
-                            this.isLoading = false;
-
-                            return;
-                        }
-
-                    } catch (e) {}
-
-                    this.getCategories();
-                },
-
-                getCategories() {
-                    this.$axios.get("{{ route('shop.api.categories.tree') }}")
-                        .then(response => {
-                            this.isLoading = false;
-                            this.categories = response.data.data;
-                            localStorage.setItem('categories', JSON.stringify(this.categories));
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                },
-
-                pairCategoryChildren(category) {
-                    if (! category.children) return [];
-
-                    return category.children.reduce((result, value, index, array) => {
-                        if (index % 2 === 0) {
-                            result.push(array.slice(index, index + 2));
-                        }
-                        return result;
-                    }, []);
-                },
-
-                toggleCategoryDrawer() {
-                    this.isDrawerActive = !this.isDrawerActive;
-                    if (this.isDrawerActive) {
-                        this.currentViewLevel = 'main';
-                    }
-                },
-
-                onDrawerToggle(event) {
-                    this.isDrawerActive = event.isActive;
-                },
-
-                onDrawerClose(event) {
-                    this.isDrawerActive = false;
-                },
-
-                showThirdLevel(secondLevelCategory, parentCategory, event) {
-                    if (secondLevelCategory.children && secondLevelCategory.children.length) {
-                        this.currentSecondLevelCategory = secondLevelCategory;
-                        this.currentParentCategory = parentCategory;
-                        this.currentViewLevel = 'third';
-
-                        if (event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    }
-                },
-
-                goBackToMainView() {
-                    this.currentViewLevel = 'main';
-                }
-            },
+                        const response = await fetch(`${searchInput.dataset.searchSuggestionsUrl}?query=${encodeURIComponent(term)}`, { headers: { 'Accept': 'application/json' } });
+                        const payload  = await response.json();
+                        datalist.innerHTML = (payload.data || []).map(item => `<option value="${String(item.name).replace(/"/g, '&quot;')}"></option>`).join('');
+                    } catch { datalist.innerHTML = ''; }
+                }, 220);
+            });
         });
 
-        document
-            .querySelectorAll('input[name="query"][data-search-suggestions-url]')
-            .forEach((searchInput) => {
-                const datalistId = searchInput.getAttribute('list');
-                const datalist = datalistId ? document.getElementById(datalistId) : null;
-
-                if (! datalist) {
-                    return;
-                }
-
-                let debounceTimer = null;
-
-                searchInput.addEventListener('input', () => {
-                    const term = searchInput.value.trim();
-
-                    clearTimeout(debounceTimer);
-
-                    if (term.length < 2) {
-                        datalist.innerHTML = '';
-
-                        return;
-                    }
-
-                    debounceTimer = setTimeout(async () => {
-                        try {
-                            const response = await fetch(`${searchInput.dataset.searchSuggestionsUrl}?query=${encodeURIComponent(term)}`, {
-                                headers: {
-                                    'Accept': 'application/json',
-                                },
-                            });
-
-                            const payload = await response.json();
-
-                            const options = (payload.data || [])
-                                .map((item) => `<option value="${String(item.name).replace(/"/g, '&quot;')}"></option>`)
-                                .join('');
-
-                            datalist.innerHTML = options;
-                        } catch (error) {
-                            datalist.innerHTML = '';
-                        }
-                    }, 220);
-                });
-            });
+        // Profile dropdown toggle
+        const wrap = document.querySelector('.profile-dropdown-wrap');
+        if (wrap) {
+            const btn  = wrap.querySelector('a');
+            const drop = wrap.querySelector('.profile-dropdown');
+            if (btn && drop) {
+                btn.addEventListener('mouseenter', () => { drop.style.display = 'block'; });
+                wrap.addEventListener('mouseleave', () => { drop.style.display = 'none'; });
+            }
+        }
     </script>
 @endPushOnce
+
 {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.after') !!}

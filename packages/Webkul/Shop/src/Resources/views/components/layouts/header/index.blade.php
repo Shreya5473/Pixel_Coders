@@ -6,7 +6,7 @@
     </div>
 @endif
 
-<header class="shadow-gray sticky top-0 z-10 bg-white shadow-sm max-lg:shadow-none">
+<header class="navbar-glass" style="position:fixed;top:12px;left:16px;right:16px;z-index:1000;background:rgba(255,255,255,0.28);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.42);border-radius:20px;box-shadow:0 6px 24px rgba(100,120,160,0.12);" aria-label="Site navigation">
     <v-header-switcher>
         <!-- Desktop Header Shimmer -->
         <div class="flex flex-wrap max-lg:hidden">

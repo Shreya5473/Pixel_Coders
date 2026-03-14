@@ -73,6 +73,9 @@
                     name="query"
                     value="{{ request('query') }}"
                     class="block w-full py-3 text-xs font-medium text-gray-900 transition-all border border-transparent rounded-lg bg-zinc-100 px-11 hover:border-gray-400 focus:border-gray-400"
+                    list="shop-search-suggestions"
+                    data-search-suggestions-url="{{ route('shop.search.suggestions') }}"
+                    autocomplete="off"
                     minlength="{{ core()->getConfigData('catalog.products.search.min_query_length') }}"
                     maxlength="{{ core()->getConfigData('catalog.products.search.max_query_length') }}"
                     placeholder="@lang('shop::app.components.layouts.header.desktop.bottom.search-text')"
@@ -93,6 +96,8 @@
                     @include('shop::search.images.index')
                 @endif
             </form>
+
+            <datalist id="shop-search-suggestions"></datalist>
         </div>
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.after') !!}
@@ -605,6 +610,51 @@
                 }
             },
         });
+
+        document
+            .querySelectorAll('input[name="query"][data-search-suggestions-url]')
+            .forEach((searchInput) => {
+                const datalistId = searchInput.getAttribute('list');
+                const datalist = datalistId ? document.getElementById(datalistId) : null;
+
+                if (! datalist) {
+                    return;
+                }
+
+                let debounceTimer = null;
+
+                searchInput.addEventListener('input', () => {
+                    const term = searchInput.value.trim();
+
+                    clearTimeout(debounceTimer);
+
+                    if (term.length < 2) {
+                        datalist.innerHTML = '';
+
+                        return;
+                    }
+
+                    debounceTimer = setTimeout(async () => {
+                        try {
+                            const response = await fetch(`${searchInput.dataset.searchSuggestionsUrl}?query=${encodeURIComponent(term)}`, {
+                                headers: {
+                                    'Accept': 'application/json',
+                                },
+                            });
+
+                            const payload = await response.json();
+
+                            const options = (payload.data || [])
+                                .map((item) => `<option value="${String(item.name).replace(/"/g, '&quot;')}"></option>`)
+                                .join('');
+
+                            datalist.innerHTML = options;
+                        } catch (error) {
+                            datalist.innerHTML = '';
+                        }
+                    }, 220);
+                });
+            });
     </script>
 @endPushOnce
 {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.after') !!}

@@ -219,9 +219,14 @@
                 class="block w-full rounded-xl border border-['#E3E3E3'] px-11 py-3.5 text-sm font-medium text-gray-900 max-md:rounded-lg max-md:px-10 max-md:py-3 max-md:font-normal max-sm:text-xs"
                 name="query"
                 value="{{ request('query') }}"
+                list="shop-search-suggestions-mobile"
+                data-search-suggestions-url="{{ route('shop.search.suggestions') }}"
+                autocomplete="off"
                 placeholder="@lang('shop::app.components.layouts.header.mobile.search-text')"
                 required
             >
+
+            <datalist id="shop-search-suggestions-mobile"></datalist>
 
             @if (core()->getConfigData('catalog.products.settings.image_search'))
                 @include('shop::search.images.index')

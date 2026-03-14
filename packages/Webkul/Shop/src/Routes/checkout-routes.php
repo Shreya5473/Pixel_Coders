@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Webkul\Shop\Http\Controllers\CartController;
 use Webkul\Shop\Http\Controllers\OnepageController;
+use Webkul\Shop\Http\Controllers\StripePaymentController;
 
 /**
  * Cart routes.
@@ -15,4 +16,12 @@ Route::controller(OnepageController::class)->prefix('checkout/onepage')->group(f
     Route::get('', 'index')->name('shop.checkout.onepage.index');
 
     Route::get('success', 'success')->name('shop.checkout.onepage.success');
+});
+
+Route::controller(StripePaymentController::class)->group(function () {
+    Route::get('checkout/stripe/{order}', 'checkout')->name('shop.stripe.checkout');
+
+    Route::post('create-payment-intent', 'createPaymentIntent')->name('shop.stripe.payment.intent');
+
+    Route::get('payment-success', 'paymentSuccess')->name('shop.stripe.payment.success');
 });

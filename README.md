@@ -64,6 +64,74 @@ Follow the [Getting Started with Bagisto](https://www.youtube.com/watch?v=s_DhQr
 
 You can browse through the Free [Live Demo](https://demo.bagisto.com/)
 
+## New Features Added
+
+- Smart product search powered by Meilisearch
+- Secure online payments using Stripe (test mode)
+- Automated email notifications for orders
+
+## Smart Search Setup (Meilisearch + Scout)
+
+1. Install dependencies:
+
+```bash
+composer require laravel/scout meilisearch/meilisearch-php
+```
+
+2. Configure environment variables:
+
+```dotenv
+SCOUT_DRIVER=meilisearch
+MEILISEARCH_HOST=http://127.0.0.1:7700
+MEILISEARCH_KEY=masterKey
+```
+
+3. Start Meilisearch server:
+
+```bash
+./meilisearch --master-key=masterKey
+```
+
+4. Import products into the Scout index:
+
+```bash
+php artisan scout:import "Webkul\\Product\\Models\\Product"
+```
+
+## Stripe Setup (Test Mode)
+
+1. Install SDK:
+
+```bash
+composer require stripe/stripe-php
+```
+
+2. Add keys to `.env`:
+
+```dotenv
+STRIPE_KEY=pk_test_xxxxxxxxxxxx
+STRIPE_SECRET=sk_test_xxxxxxxxxxxx
+```
+
+3. Enable Stripe payment method from admin configuration:
+
+`Configure -> Sales -> Payment Methods -> Stripe`
+
+4. Use Stripe test cards during checkout.
+
+## Mail Setup (SMTP Example)
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_username
+MAIL_PASSWORD=your_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=store@example.com
+MAIL_FROM_NAME="Bagisto Store"
+```
+
 ## ☁️ Cloud Installation via Amazon AMI
 
 You can also deploy Bagisto quickly using our pre-configured Amazon Machine Image (AMI) available on the AWS Marketplace:

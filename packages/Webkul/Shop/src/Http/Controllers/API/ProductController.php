@@ -5,6 +5,7 @@ namespace Webkul\Shop\Http\Controllers\API;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Marketing\Jobs\UpdateCreateSearchTerm as UpdateCreateSearchTermJob;
+use Webkul\Product\Models\Product;
 use Webkul\Product\Repositories\ProductRepository;
 use Webkul\Shop\Http\Resources\ProductResource;
 
@@ -35,10 +36,27 @@ class ProductController extends APIController
 
         $query = $searchData['effective_query'] ?? $searchData['original_query'];
 
+        $searchResultProductIds = [];
+
+        if ($this->shouldUseScoutSearch($query)) {
+            $searchResultProductIds = Product::search($query)
+                ->take(250)
+                ->get()
+                ->pluck('id')
+                ->map(fn ($id) => (int) $id)
+                ->filter()
+                ->values()
+                ->all();
+
+            // Query text matching is now delegated to Meilisearch.
+            $searchEngine = 'database';
+        }
+
         $products = $this->productRepository
             ->setSearchEngine($searchEngine)
             ->getAll(array_merge(request()->query(), [
-                'query' => $query,
+                'query' => empty($searchResultProductIds) ? $query : null,
+                'ids' => $searchResultProductIds,
                 'channel_id' => core()->getCurrentChannel()->id,
                 'status' => 1,
                 'visible_individually' => 1,
@@ -60,6 +78,17 @@ class ProductController extends APIController
         }
 
         return ProductResource::collection($products);
+    }
+
+    /**
+     * Decide when Scout should be used for storefront search.
+     */
+    protected function shouldUseScoutSearch(?string $query): bool
+    {
+        return ! empty($query)
+            && config('scout.driver') === 'meilisearch'
+            && class_exists('Laravel\\Scout\\Searchable')
+            && method_exists(Product::class, 'search');
     }
 
     /**

@@ -18,4 +18,13 @@ return [
         'active' => true,
         'sort' => 2,
     ],
+
+    'stripe' => [
+        'code' => 'stripe',
+        'title' => 'Stripe',
+        'description' => 'Pay securely via Stripe',
+        'class' => 'Webkul\Payment\Payment\Stripe',
+        'active' => false,
+        'sort' => 3,
+    ],
 ];

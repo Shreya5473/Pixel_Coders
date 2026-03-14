@@ -222,7 +222,7 @@
                                         :alt="item.name"
                                         loading="lazy"
                                         decoding="async"
-                                        style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.45s ease;"
+                                        style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;transition:transform 0.45s ease;padding:8px;"
                                         onmouseover="this.style.transform='scale(1.05)'"
                                         onmouseout="this.style.transform='scale(1)'"
                                     />

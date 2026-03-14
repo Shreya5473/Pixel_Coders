@@ -100,8 +100,7 @@ class CollectionProductsSeeder extends Seeder
                     return in_array(strtolower(pathinfo($filePath, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'webp']);
                 })
                 ->sort()
-                ->values()
-                ->take(2);
+                ->values();
 
             if ($images->isEmpty()) {
                 $this->command?->warn("No images found for {$collection['title']}, skipping.");
@@ -112,7 +111,10 @@ class CollectionProductsSeeder extends Seeder
             foreach ($images as $index => $imagePath) {
                 $productNumber = $index + 1;
                 $titleSlug = Str::slug($collection['title']);
-                $sku = "collection-{$titleSlug}-product-{$productNumber}";
+                $colorSlug = Str::slug(basename(dirname($imagePath)));
+                $imageSlug = Str::slug(pathinfo($imagePath, PATHINFO_FILENAME));
+
+                $sku = Str::limit("collection-{$titleSlug}-{$colorSlug}-{$imageSlug}", 90, '');
 
                 $product = Product::query()->where('sku', $sku)->first();
 
@@ -132,7 +134,11 @@ class CollectionProductsSeeder extends Seeder
                     true
                 );
 
-                $name = "{$collection['title']} Product {$productNumber}";
+                $name = "{$collection['title']} {$productNumber}";
+
+                $urlKey = Str::limit("{$titleSlug}-{$colorSlug}-{$imageSlug}", 180, '');
+
+                $price = 699 + (abs(crc32($sku)) % 1401);
 
                 $product->update([
                     'sku' => $sku,
@@ -145,8 +151,8 @@ class CollectionProductsSeeder extends Seeder
 
                 $attributeData = [
                     'name' => $name,
-                    'url_key' => Str::slug("{$collection['title']}-product-{$productNumber}"),
-                    'price' => 999 + ($productNumber * 100),
+                    'url_key' => $urlKey,
+                    'price' => $price,
                     'status' => 1,
                     'visible_individually' => 1,
                     'new' => 1,

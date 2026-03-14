@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
 use Shetabit\Visitor\Traits\Visitable;
 use Webkul\Attribute\Models\AttributeFamilyProxy;
 use Webkul\Attribute\Models\AttributeProxy;
@@ -25,7 +26,7 @@ use Webkul\Product\Type\AbstractType;
 
 class Product extends Model implements ProductContract
 {
-    use HasFactory, Visitable;
+    use HasFactory, Searchable, Visitable;
 
     /**
      * The attributes that are mass assignable.
@@ -50,6 +51,24 @@ class Product extends Model implements ProductContract
      * @var AbstractType
      */
     protected $typeInstance;
+
+    /**
+     * Build the payload used by Laravel Scout indexers.
+     */
+    public function toSearchableArray(): array
+    {
+        $flat = $this->product_flats
+            ->firstWhere('channel', core()->getCurrentChannelCode())
+            ?? $this->product_flats->first();
+
+        return [
+            'id' => $this->id,
+            'sku' => $this->sku,
+            'name' => $flat?->name,
+            'description' => $flat?->description,
+            'price' => (float) ($flat?->price ?? 0),
+        ];
+    }
 
     /**
      * Get the product flat entries that are associated with product.

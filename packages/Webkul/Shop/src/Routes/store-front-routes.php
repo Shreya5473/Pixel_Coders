@@ -48,6 +48,9 @@ Route::get('search', [SearchController::class, 'index'])
 
 Route::post('search/upload', [SearchController::class, 'upload'])->name('shop.search.upload');
 
+Route::get('search/suggestions', [SearchController::class, 'suggestions'])
+    ->name('shop.search.suggestions');
+
 /**
  * Subscription routes.
  */

@@ -180,6 +180,13 @@ class OnepageController extends APIController
 
         session()->flash('order_id', $order->id);
 
+        if (($order->payment?->method ?? null) === 'stripe') {
+            return new JsonResource([
+                'redirect' => true,
+                'redirect_url' => route('shop.stripe.checkout', ['order' => $order->id]),
+            ]);
+        }
+
         return new JsonResource([
             'redirect' => true,
             'redirect_url' => route('shop.checkout.onepage.success'),

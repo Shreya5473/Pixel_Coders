@@ -2,8 +2,11 @@
 
 namespace Webkul\Shop\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Webkul\Marketing\Repositories\SearchTermRepository;
+use Webkul\Product\Models\Product;
 use Webkul\Product\Repositories\SearchRepository;
 
 class SearchController extends Controller
@@ -79,5 +82,54 @@ class SearchController extends Controller
         ]);
 
         return $this->searchRepository->uploadSearchImage(request()->all());
+    }
+
+    /**
+     * Live search suggestions for autocomplete.
+     */
+    public function suggestions(Request $request): JsonResponse
+    {
+        $request->validate([
+            'query' => ['required', 'string', 'min:2', 'regex:/^[^\\]+$/u'],
+        ]);
+
+        $query = (string) $request->input('query');
+
+        $products = collect();
+
+        if (
+            config('scout.driver') === 'meilisearch'
+            && class_exists('Laravel\\Scout\\Searchable')
+            && method_exists(Product::class, 'search')
+        ) {
+            $products = Product::search($query)
+                ->take(8)
+                ->get();
+        }
+
+        if ($products->isEmpty()) {
+            $products = Product::query()
+                ->with('product_flats')
+                ->whereHas('product_flats', function ($builder) use ($query) {
+                    $builder->where('name', 'like', '%'.$query.'%');
+                })
+                ->limit(8)
+                ->get();
+        }
+
+        $suggestions = $products->map(function ($product) {
+            $flat = $product->product_flats
+                ->firstWhere('channel', core()->getCurrentChannelCode())
+                ?? $product->product_flats->first();
+
+            return [
+                'id' => $product->id,
+                'name' => $flat?->name,
+            ];
+        })->filter(fn ($item) => ! empty($item['name']))->values();
+
+        return response()->json([
+            'data' => $suggestions,
+        ]);
     }
 }

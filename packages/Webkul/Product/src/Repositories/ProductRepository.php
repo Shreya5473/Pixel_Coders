@@ -291,6 +291,18 @@ class ProductRepository extends Repository
                 }
             }
 
+            if (! empty($params['ids'])) {
+                $ids = is_array($params['ids']) ? $params['ids'] : explode(',', (string) $params['ids']);
+
+                $ids = array_values(array_filter(array_map('intval', $ids)));
+
+                if (empty($ids)) {
+                    $qb->whereRaw('1 = 0');
+                } else {
+                    $qb->whereIn('products.id', $ids);
+                }
+            }
+
             /**
              * Filter query by price.
              */

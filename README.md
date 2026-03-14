@@ -46,22 +46,6 @@
     <img class="flag-img" src="https://raw.githubusercontent.com/bagisto/temp-media/master/bagisto-featured.png" alt="Chinese" width="100%">
 </a>
 
----
-
-## Project structure (Frontend · Backend · Old)
-
-This repo is organized into three areas:
-
-| Folder | Purpose |
-|--------|--------|
-| **[frontend/](frontend/)** | Frontend source (Vite entrypoints: JS, CSS). Built assets go to `public/build`. Shop UI views live in `packages/Webkul/Shop/`. |
-| **[backend/](backend/)** | Backend entrypoint. Laravel/Bagisto app lives at root: `app/`, `config/`, `database/`, `routes/`, `packages/Webkul/*`. |
-| **[old/](old/)** | Unused or legacy files. Move deprecated code here when it is no longer needed. |
-
-Full path reference: **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)**.
-
----
-
 # Introduction
 
 Bagisto is an opensource [laravel eCommerce](https://www.bagisto.com/) framework built on some of the hottest technologies such as [Laravel](https://laravel.com/) (a [PHP](https://secure.php.net/) framework) and [Vue.js](https://vuejs.org/) a progressive Javascript framework.

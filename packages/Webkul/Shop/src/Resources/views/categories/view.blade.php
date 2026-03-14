@@ -66,7 +66,13 @@
             id="v-category-template"
         >
             <div class="container px-[60px] max-lg:px-8 max-md:px-4">
-                <div class="flex items-start gap-10 max-lg:gap-5 md:mt-10">
+            <!-- Category Glassmorphism Header -->
+            <div class="glass-category-header">
+                <h1 class="glass-category-title">{{ $category->name }}</h1>
+                <p class="glass-category-desc">{{ strip_tags($category->description) }}</p>
+            </div>
+
+            <div class="flex items-start gap-10 max-lg:gap-5 md:mt-8">
                     <!-- Product Listing Filters -->
                     @include('shop::categories.filters')
 
@@ -126,7 +132,7 @@
                         <div v-else class="mt-8 max-md:mt-5">
                             <!-- Product Card Shimmer Effect -->
                             <template v-if="isLoading">
-                                <div class="grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
+                                <div class="grid grid-cols-4 gap-6 max-1280:grid-cols-3 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
                                     <x-shop::shimmer.products.cards.grid count="12" />
                                 </div>
                             </template>
@@ -136,7 +142,7 @@
                             <!-- Product Card Listing -->
                             <template v-else>
                                 <template v-if="products.length">
-                                    <div class="grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
+                                    <div class="grid grid-cols-4 gap-6 max-1280:grid-cols-3 max-1060:grid-cols-2 max-md:justify-items-center max-md:gap-x-4">
                                         <x-shop::products.card
                                             ::mode="'grid'"
                                             v-for="product in products"
@@ -193,8 +199,8 @@
 
                         {!! view_render_event('bagisto.shop.categories.view.grid.load_more_button.after') !!}
                     </div>
-                </div>
             </div>
+        </div>
         </script>
 
         <script type="module">

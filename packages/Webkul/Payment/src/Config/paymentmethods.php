@@ -24,7 +24,7 @@ return [
         'title' => 'Stripe',
         'description' => 'Pay securely via Stripe',
         'class' => 'Webkul\Payment\Payment\Stripe',
-        'active' => false,
+        'active' => true,
         'sort' => 3,
     ],
 ];

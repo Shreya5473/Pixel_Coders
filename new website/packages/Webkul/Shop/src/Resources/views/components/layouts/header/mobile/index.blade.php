@@ -25,7 +25,7 @@
                 href="{{ route('shop.home.index') }}"
                 style="display:flex;align-items:center;gap:8px;font:500 18px/1 'Fraunces',serif;color:#2F3A45;text-decoration:none;letter-spacing:0.04em;"
                 aria-label="BAGISTO Home"
-            ><img src="{{ asset('images/acm-logo.png') }}" alt="ACM Logo" style="width:22px;height:22px;object-fit:contain;border-radius:6px;" loading="lazy" decoding="async" />BAGISTO</a>
+            ><img src="{{ request()->getSchemeAndHttpHost() }}/images/acm-logo.png" alt="ACM Logo" style="width:22px;height:22px;object-fit:contain;border-radius:6px;" loading="lazy" decoding="async" />BAGISTO</a>
 
             {!! view_render_event('bagisto.shop.components.layouts.header.mobile.logo.after') !!}
         </div>

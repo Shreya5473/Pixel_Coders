@@ -40,14 +40,14 @@
                     $colors[] = ['name' => $cName, 'hex' => $colorHexMap[$cName] ?? '#888'];
                     if (!$thumbImg) {
                         $seg = ['images','collections',$folder,basename($cDir),basename($files[0])];
-                        $thumbImg = asset(implode('/', array_map('rawurlencode', $seg)));
+                        $thumbImg = request()->getSchemeAndHttpHost() . '/' . implode('/', array_map('rawurlencode', $seg));
                     }
                 }
                 foreach (array_slice($files, 0, 8) as $f) {
                     $seg   = ['images','collections',$folder,basename($cDir),basename($f)];
                     $price = $def['min'] + (abs(crc32(basename($f))) % max(1, $def['max'] - $def['min'] + 1));
                     $items[] = [
-                        'url'   => asset(implode('/', array_map('rawurlencode', $seg))),
+                        'url'   => request()->getSchemeAndHttpHost() . '/' . implode('/', array_map('rawurlencode', $seg)),
                         'color' => $cName,
                         'hex'   => $colorHexMap[$cName] ?? '#888',
                         'name'  => ucfirst($cName),
@@ -55,7 +55,7 @@
                     ];
                     // collect potential hero images (Clothes for editorial)
                     if ($folder === 'Clothes') {
-                        $heroImages[] = asset(implode('/', array_map('rawurlencode', $seg)));
+                        $heroImages[] = request()->getSchemeAndHttpHost() . '/' . implode('/', array_map('rawurlencode', $seg));
                     }
                 }
             }
@@ -120,7 +120,7 @@
     {{-- ── ACM Intro Landing ────────────────────────────────────────── --}}
     <section class="acm-intro" aria-label="Bagisto landing intro">
         <div class="acm-intro-card">
-            <img class="acm-intro-logo" src="{{ asset('images/acm-logo.png') }}" alt="ACM Logo" loading="lazy" decoding="async" />
+            <img class="acm-intro-logo" src="{{ request()->getSchemeAndHttpHost() }}/images/acm-logo.png" alt="ACM Logo" loading="lazy" decoding="async" />
 
             <h1 class="acm-intro-word" aria-label="BAGISTO">
                 <span class="acm-letter">B</span>

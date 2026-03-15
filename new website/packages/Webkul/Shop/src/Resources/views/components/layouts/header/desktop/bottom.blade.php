@@ -5,7 +5,7 @@
     {{-- ── Left: Brand ──────────────────────────────────────────────── --}}
     <div style="flex-shrink:0;">
         <a href="{{ route('shop.home.index') }}" style="display:flex;align-items:center;gap:10px;font:500 20px/1 'Fraunces',serif;color:#2F3A45;text-decoration:none;letter-spacing:0.04em;" aria-label="BAGISTO Home">
-            <img src="{{ asset('images/acm-logo.png') }}" alt="ACM Logo" style="width:26px;height:26px;object-fit:contain;border-radius:8px;" loading="lazy" decoding="async" />
+            <img src="{{ request()->getSchemeAndHttpHost() }}/images/acm-logo.png" alt="ACM Logo" style="width:26px;height:26px;object-fit:contain;border-radius:8px;" loading="lazy" decoding="async" />
             BAGISTO
         </a>
     </div>

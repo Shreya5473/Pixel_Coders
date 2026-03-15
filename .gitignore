@@ -23,7 +23,6 @@ boost.json
 Homestead.json
 Homestead.yaml
 /ignorables/*
-/dist
 /node_modules
 npm-debug.log
 opencode.json

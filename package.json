@@ -3,8 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
-        "build:vercel": "vite build && node scripts/vercel-static-build.mjs"
+        "build": "vite build"
     },
     "devDependencies": {
         "@playwright/test": "^1.58.1",

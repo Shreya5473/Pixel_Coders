@@ -1,244 +1,105 @@
-<p align="center">
-  <a href="http://www.bagisto.com">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bagisto/temp-media/0b0984778fae92633f57e625c5494ead1fe320c3/dark-logo-P5H7MBtx.svg">
-      <source media="(prefers-color-scheme: light)" srcset="https://bagisto.com/wp-content/themes/bagisto/images/logo.png">
-      <img src="https://bagisto.com/wp-content/themes/bagisto/images/logo.png" alt="Bagisto logo">
-    </picture>
-  </a>
-</p>
+Welcome to our project! For this hackathon, we were challenged to rebuild and improve a broken e-commerce repository. We have used old github repository of [Bagisto](https://github.com/bagisto/bagisto). We retained the core structure and product data but dramatically improved the UI, backend capabilities, and user experience. 
 
-<p align="center">
-    <a href="https://packagist.org/packages/bagisto/bagisto"><img src="https://poser.pugx.org/bagisto/bagisto/d/total.svg" alt="Total Downloads"></a>
-    <a href="https://packagist.org/packages/bagisto/bagisto"><img src="https://poser.pugx.org/bagisto/bagisto/v/stable.svg" alt="Latest Stable Version"></a>
-    <a href="https://packagist.org/packages/bagisto/bagisto"><img src="https://poser.pugx.org/bagisto/bagisto/license.svg" alt="License"></a>
-    <a href="#backers"><img src="https://opencollective.com/bagisto/backers/badge.svg" alt="Backers on Open Collective"></a>
-    <a href="#sponsors"><img src="https://opencollective.com/bagisto/sponsors/badge.svg" alt="Sponsors on Open Collective"></a>
-    <a href="https://www.codetriage.com/bagisto/bagisto"><img src="https://www.codetriage.com/bagisto/bagisto/badges/users.svg" alt="Open Source Helpers"></a>
-</p>
+## 🎬 Demo Video & Deployment
+- **Watch the Demo Video:** [[Link to 4-6 minute walkthrough video]*](https://drive.google.com/drive/folders/1n4kLiUPbsCcJ2zSRHuM6_wDsEAQQATe_?usp=drive_link)
+  
 
-<p align="center">
-    <a href="https://twitter.com/intent/follow?screen_name=bagistoshop"><img src="https://img.shields.io/twitter/follow/bagistoshop?style=social"></a>
-    <a href="https://www.youtube.com/channel/UCbrfqnhyiDv-bb9QuZtonYQ"><img src="https://img.shields.io/youtube/channel/subscribers/UCbrfqnhyiDv-bb9QuZtonYQ?style=social"></a>
-</p>
+---
 
-<p align="center">
-    ➡️ <a href="https://bagisto.com/en/">Website</a> | <a href="https://devdocs.bagisto.com/">Documentation</a> | <a href="https://devdocs.bagisto.com/2.3/introduction/installation.html#installation">Installation Guide</a> | <a href="https://devdocs.bagisto.com/2.3/introduction/docker.html">Docker Installation</a>  | <a href="https://forums.bagisto.com/">Forums</a> | <a href="https://www.facebook.com/groups/bagisto/">Community</a> ⬅️
-</p>
+## 🛠 Project Overview
+### The Before (Original State)-
+
+Before our intervention, the Bagisto base repo suffered from a variety of friction points common in out-of-the-box e-commerce setups:
+- **Clunky User Interface:** The default "Velocity" theme felt rigid, slightly outdated, and lacked the visual wow-factor required for modern boutique commerce.
+- **Complex Authentication Flow:** The original sign-up strictly required a multitude of fields upfront, leading to increased drop-off rates for new potential customers.
+- **Broken Data Pipelines & Empty Stores:** The homepage layout had hardcoded legacy links that didn't match real data. Products were entirely missing from these categories, and there were no clickable options to actually browse items efficiently.
+- **Basic Payment & Search Flow:** Search relied on simple, slow database queries, and the storefront lacked modern integration for scalable payments.
 
 
-<p align="center" style="display: inline;">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/ar.svg" alt="Arabic" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/de.svg" alt="German" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/us.svg" alt="English" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/es.svg" alt="Spanish" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/ir.svg" alt="Persian" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/it.svg" alt="Italian" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/nl.svg" alt="Dutch" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/pl.svg" alt="Polish" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/pt.svg" alt="Portuguese" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/tr.svg" alt="Turkish" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/eg.svg" alt="Egyptian" width="24" height="24">
-    <img class="flag-img" src="https://flagicons.lipis.dev/flags/4x3/cn.svg" alt="Chinese" width="24" height="24">
-</p>
 
-<a href="https://www.youtube.com/watch?v=OHbte7hdxYU">
-    <img class="flag-img" src="https://raw.githubusercontent.com/bagisto/temp-media/master/bagisto-featured.png" alt="Chinese" width="100%">
-</a>
+### The After (Our Enhancements & Fixes)-
+We totally revitalized the platform, turning it into a fast, premium, highly-usable store while rigorously keeping the core Laravel/Bagisto Foundation intact for product and order management.
 
-# Introduction
+#### 1. UI & UX Rebuild: The "Glassmorphism" Aesthetic ✨
+We discarded the blocky nature of the default site and engineered a stunning, custom **Light Pastel Glassmorphism design system** across the platform. This aesthetic upgrade gives the e-commerce store a premium, modern, and trustworthy feel right from the first glance.
+- **Populated Dynamic Collection Pages:** We completely solved the original "empty store" problem by curating and introducing over **108 high-quality editorial images**. These are beautifully organized into 6 main, dynamically rendered product sections: *Clothes, Hats, Pants, Sweaters, Costumes, and T-shirts*. Each section is fully interactive, featuring sleek, fully-clickable product cards on the new storefront. The website is now vibrant, populated, and fully functional!
+- **Interactive Component Filters:** We implemented dynamic color filters (Red, Green, Blue, Black, White, Yellow) tailored perfectly within the glassmorphism theme, allowing users to effortlessly refine their search.
+- **Improved Carts & Profiles:** We integrated seamless, modern slide-out modal carts and profile sidebars that load instantly via JavaScript, meaning users no longer have to suffer through disruptive full-page reloads when adding items to their cart.
 
-Bagisto is an opensource [laravel eCommerce](https://www.bagisto.com/) framework built on some of the hottest technologies such as [Laravel](https://laravel.com/) (a [PHP](https://secure.php.net/) framework) and [Vue.js](https://vuejs.org/) a progressive Javascript framework.
+#### 2. Backend Search & Payments ⚙️
+- **Meilisearch + Laravel Scout Integration:** We replaced the slow standard query searching with Meilisearch, bringing blazing-fast autocomplete and typo-tolerant search functionality directly to the storefront.
+- **Stripe Checkout Integration:** Configured an industry-standard, secure payment pipeline with the Stripe API, moving past the basic "Mock" payment solutions included.
 
-Bagisto can help you cut down your time, cost, and workforce for building online stores or migrating from physical stores to the ever-demanding online world. Your business—whether small or huge—can benefit. The best part, it's straightforward to set it up!
+#### 3. Streamlined Authentication & Onboarding 🔐
+- **Email-Only Signups:** We completely rewrote the authentication logic. Users can now sign up securely using *just* an email and password, dramatically reducing bounce rates. To prevent breaking Bagisto's internal DB constraints (which demand a first/last name), we wrote a custom backend interceptor that elegantly auto-derives and seeds these values based on their email prefix.
+- **Personalized & Professional Welcome Emails:** We completely overhauled the customer engagement flow. Triggered immediately by our custom signup form, the platform now automatically sends a highly professional, fashion-forward welcome email to the user (e.g., "Welcome to Bagisto – your new destination for fashion..."). This creates a fantastic first impression that was entirely absent in the original repository!
 
-![Repo Stats](https://raw.githubusercontent.com/bagisto/temp-media/master/stats.webp)
+---
 
-# Getting Started
-
-![Getting Started](https://raw.githubusercontent.com/bagisto/temp-media/master/geting-starded.png)
-
-[Install Bagisto](https://devdocs.bagisto.com/2.3/introduction/installation.html#install-using-gui-installer) with or without Composer (Check [Requirement Details](https://bagisto.com/en/download/))
-
-Follow the [Getting Started with Bagisto](https://www.youtube.com/watch?v=s_DhQrjK8Tw&list=PLe30vg_FG4OS3BU8rHUKQZ2mnX45xwSMc) Tutorial
-
-You can browse through the Free [Live Demo](https://demo.bagisto.com/)
-
-## New Features Added
-
-- Smart product search powered by Meilisearch
-- Secure online payments using Stripe (test mode)
-- Automated email notifications for orders
-
-## Smart Search Setup (Meilisearch + Scout)
-
-1. Install dependencies:
-
-```bash
-composer require laravel/scout meilisearch/meilisearch-php
+## 📂 Project Structure
+Although we built off the massive Bagisto CRM core, the vast majority of our bespoke hackathon improvements occur within these domains:
+```text
+bagisto/
+├── packages/Webkul/Shop/                # Primary module where we rebuilt the storefront
+│   ├── src/Http/Controllers/            # (New logic for auth interception and dynamic collections)
+│   ├── src/Resources/views/             # (Overhauled the entire UI into Glassmorphism blade views)
+│   └── src/Routes/store-front-routes.php # (Rewrote storefront routing and API endpoints)
+├── config/paymentmethods.php            # (Configured the new Stripe integration)
+├── frontend/                            # (Compiled custom frontend SCSS/JS assets via Vite)
+├── public/images/collections/           # (New dynamic high-res image catalog assets)
+└── docker-compose.yml / sail            # (Environment deployment configurations)
 ```
 
-2. Configure environment variables:
-
-```dotenv
-SCOUT_DRIVER=meilisearch
-MEILISEARCH_HOST=http://127.0.0.1:7700
-MEILISEARCH_KEY=masterKey
-```
-
-3. Start Meilisearch server:
-
-```bash
-./meilisearch --master-key=masterKey
-```
-
-4. Import products into the Scout index:
-
-```bash
-php artisan scout:import "Webkul\\Product\\Models\\Product"
-```
-
-## Stripe Setup (Test Mode)
-
-1. Install SDK:
-
-```bash
-composer require stripe/stripe-php
-```
-
-2. Add keys to `.env`:
-
-```dotenv
-STRIPE_KEY=pk_test_xxxxxxxxxxxx
-STRIPE_SECRET=sk_test_xxxxxxxxxxxx
-```
-
-3. Enable Stripe payment method from admin configuration:
-
-`Configure -> Sales -> Payment Methods -> Stripe`
-
-4. Use Stripe test cards during checkout.
-
-## Mail Setup (SMTP Example)
-
-```dotenv
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=your_username
-MAIL_PASSWORD=your_password
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=store@example.com
-MAIL_FROM_NAME="Bagisto Store"
-```
-
-## ☁️ Cloud Installation via Amazon AMI
-
-You can also deploy Bagisto quickly using our pre-configured Amazon Machine Image (AMI) available on the AWS Marketplace:
-
-👉 [**Launch Bagisto on AWS**](https://aws.amazon.com/marketplace/pp/prodview-r3xv62axcqkpa)
-
-This AMI allows you to get started with Bagisto on a cloud environment without manual setup. Ideal for scalable production or testing environments.
-
-# Accelerate Your Online Store Launch with the Bagisto Starter Pack!
-
-Empower your e-commerce journey with the [Bagisto Starter Pack](https://store.webkul.com/bagisto-starter-pack.html), streamlining setup and integration for a seamless online store launch. Get ready to unlock success in the digital marketplace! 
-
-# Open Source B2B eCommerce Platform
-
-The [B2B eCommerce Platform](https://bagisto.com/en/b2b-commerce-platform/) enhances your Bagisto store with advanced Business-to-Business (B2B) features. It enables company-based purchasing, multi-user access, quote negotiation, and procurement management — empowering businesses to handle B2B workflows efficiently within a single platform.
-
-![Bagisto B2B Ecommerce Image](https://github.com/bagisto/temp-media/blob/master/intro-banner.webp)
-
-# Multi Vendor Marketplace
-
-[Multi Vendor Marketplace](https://bagisto.com/en/laravel-multi-vendor-marketplace/) transforms a standard store into a complete marketplace, allowing the admin to manage sellers, commissions, product approvals, and order handling, while giving vendors a dedicated dashboard to manage their catalog, orders, and transactions.
-
-![Multi Vendor Marketplace Image](https://github.com/bagisto/temp-media/blob/master/multi-vendor-marketplace.webp)
-
-# Multi Tenant eCommerce
-
-[Multi Tenant eCommerce](https://bagisto.com/en/laravel-multi-tenant-saas/) in Bagisto allows businesses to build a SaaS-based marketplace platform where multiple vendors or merchants can create and manage their own individual stores under a single system.
-
-![Multi Tenant eCommerce Image](https://github.com/bagisto/temp-media/blob/master/multi-tenant.webp)
-
-# POS 
-
-[Point of Sale](https://bagisto.com/en/laravel-pos/) system manages retail operations efficiently, handling inventory management and fast customer checkout for your store.
-
-![POS Image](https://github.com/bagisto/temp-media/blob/master/pos.webp)
-
-# Headless Commerce
-
-The power of headless laravel commerce now comes to Bagisto enabling you to experience seamless and easily scalable storefront performance. Backed by some of the hottest tech stacks, Bagisto commerce can now be used to build powerful headless commerce solutions offering blazing-fast speed and easy customization powered by Next.js
-
-## Next.js Commerce
-
-![Next.js Logo](https://raw.githubusercontent.com/bagisto/temp-media/master/next.png)
-
-Develop and deploy your next headless commerce storefronts with Next JS and Bagisto: [https://github.com/bagisto/nextjs-commerce](https://github.com/bagisto/nextjs-commerce)
-
-# Open Source Mobile eCommerce
-
-Revolutionize Your Online Store with Bagisto's Open Source eCommerce Mobile 
-
-![Mobile View Example Screens](https://raw.githubusercontent.com/bagisto/temp-media/master/open-source-ecommerce-mobile.png)
-
-Mobile eCommerce powered by Flutter & Laravel: https://github.com/bagisto/opensource-ecommerce-mobile-app
-
-# AI Powered eCommerce
-
-You can integrate popular large language models like GPT-5, Gemini 3, Mistral, and LLaMA 4, Grok (xAI),GLM 4.6,Kimi-K2, Qwen 3, Deepseek etc to build [AI-powered eCommerce](https://bagisto.com/en/extensions/laravel-chatbot-using-openai-chatgpt-llm/) applications with Bagisto. Some of the popular use cases where you can make use of LLMs to build AI apps are chatbot, automated product descriptions, customer support, search, and recommendations.
-
-![AI Powered eCommerce Examples](https://raw.githubusercontent.com/bagisto/temp-media/master/ai_powered_ecommerce.png)
-
-You can incorporate LLM API with your bagisto applications to send and receive queries and ensure proper error handling and rate limiting to prevent overuse of the API
-
-# Decentralised eCommerce
-
-Build [decentralised applications](https://bagisto.com/en/services/blockchain-commerce/) with Bagisto on popular blockchains like Ethereum and Solana by integrating smart contracts with the eCommerce platform. You can have decentralised marketplaces, [NFT marketplaces](https://bagisto.com/en/nft-marketplace/), and decentralised e-signing with the laravel eCommerce system.
-
-![Decentralized Ecommerce Example Screens](https://raw.githubusercontent.com/bagisto/temp-media/master/decentralised-ecommerce.png)
-
-# Commerce For Every Need
-
-![Commerce Store Examples](https://raw.githubusercontent.com/bagisto/temp-media/master/every-need.png)
-
-With Bagisto, you can easily create use cases for various commerce needs like Marketplaces, PWA, Native Mobile Apps, Multi-Tenants systems, Blockchain and many more.
-
-# Built In Extensions
-
-![200+ Prebuilt Extensions](https://raw.githubusercontent.com/bagisto/temp-media/master/built_in_extension.png)
-
-Make use of 100+ Bagisto pre-built extensions from [Bagisto Extension Markeptlace](https://bagisto.com/en/extensions/)
-
-# Community
-
-![Forum and Facebook Communities](https://raw.githubusercontent.com/bagisto/temp-media/master/community.png)
-
-Get Bagisto support on [Facebook Group](https://www.facebook.com/groups/bagisto) and [Forum](https://forums.bagisto.com/)
-Would like to help us build the most developer-friendly E-Commerce platform? Start by reading our [Contributing Guide](https://github.com/bagisto/bagisto/blob/master/.github/CONTRIBUTING.md)!
-
-# License
-Bagisto is a fully open-source Laravel eCommerce framework that will always remain free under the [MIT License](https://github.com/bagisto/bagisto/blob/2.3/LICENSE).
-
-# Security Vulnerabilities
-If you think that you have found a security issue in Bagisto, please do not use the issue tracker and do not post it publicly. Instead, all security issues must be sent to [mailto:support@bagisto.com](mailto:support@bagisto.com).
-
-# Contributors
-
-This project is on [Open Collective](https://opencollective.com/bagisto), and it exists thanks to the people who contribute.
-
-<a href="https://github.com/bagisto/bagisto/graphs/contributors"><img src="https://opencollective.com/bagisto/contributors.svg?width=890&button=false"/></a>
-
-# Backers
-
-Thank you to all our backers! 🙏
-
-<a href="https://opencollective.com/bagisto" target="_blank"><img src="https://opencollective.com/bagisto/backers.svg?width=890"></a>
-
-# Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website.
-
-<a href="https://opencollective.com/bagisto" target="_blank"><img src="https://opencollective.com/bagisto/sponsors.svg?width=890&isActive=true"></a>
+---
+
+## 💻 Technologies Used
+- **Backend:** PHP 8.1+, Laravel 10.x, Bagisto Core Packages
+- **Frontend:** Vanilla JS, Blade Templating, Custom CSS (Glassmorphism guidelines), Vite
+- **Database:** MySQL
+- **Search Engine:** Meilisearch + Laravel Scout
+- **Payments:** Stripe SDK
+
+---
+
+## 🚀 Setup Steps (Localhost)
+
+If you'd like to test the code locally, please follow these steps. The project has been configured to build and boot seamlessly using Laravel Sail.
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/Shreya5473/Pixel_Coders.git
+   cd Pixel_Coders
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   composer install
+   npm install && npm run build
+   ```
+
+3. **Configure Environment:**
+   Copy the example environment variables and boot the containers.
+   *(Please ensure you add your specific `STRIPE_API_KEY` and `MEILISEARCH_KEY` to the `.env` if testing full end-to-end purchasing).*
+   ```bash
+   cp .env.example .env
+   ./vendor/bin/sail up -d
+   ```
+
+4. **Run Migrations & Seed the DB:**
+   ```bash
+   ./vendor/bin/sail artisan key:generate
+   ./vendor/bin/sail artisan migrate
+   ./vendor/bin/sail artisan db:seed
+   ```
+
+5. **Start Scouting (Optional):**
+   ```bash
+   ./vendor/bin/sail artisan scout:import "Webkul\Product\Models\Product"
+   ```
+
+6. **Enjoy the Fast Storefront:**
+   Navigate to `http://localhost:8080/` (or the respective port generated by Sail) to view the redesigned site!
+
+---
+
+*Thank you to the hackathon judges for the opportunity! We had a brilliant time wrestling with the massive Bagisto architecture and finding clever ways to optimize its foundation while completely modernizing its vibe.*
